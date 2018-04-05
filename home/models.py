@@ -23,9 +23,9 @@ class Pet(models.Model):
 
 
 class Stay(models.Model):
-    ownerId: models.ForeignKey(User, related_name="Owner")
-    caretakerId: models.ForeignKey(User, related_name="Caretaker")
-    petId: models.ForeignKey(Pet)
+    ownerId: models.ForeignKey(User, related_name="Owner", on_delete=models.CASCADE)
+    caretakerId: models.ForeignKey(User, related_name="Caretaker", on_delete=models.CASCADE)
+    petId: models.ForeignKey(Pet, on_delete=models.CASCADE)
     date: models.DateField
     ownerOpinion: models.CharField(max_length=250)
     ownerOpinionType: models.CharField(max_length=1)
