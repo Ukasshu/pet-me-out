@@ -2,14 +2,7 @@
     <h2>Registration</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <label style="width: 500px">Name </label><input type="text" name="name" required/></br>
-        <label style="width: 500px">Surname </label><input type="text" name="surname" required/></br>
-        <label style="width: 500px">Mail </label><input type="text" name="mail" required/></br>
-        <label style="width: 500px">City </label><input type="text" name="city" required/></br>
-        <label style="width: 500px">Contact </label><input type="text" name="contact" required/></br>
-        <label style="width: 500px">Date of birth </label><input type="date" name="dateOfBirth" required/></br>
-        <label style="width: 500px">Password </label><input type="password" name="password" required/></br>
-        <button type="submit">Register</button>
+        {{ form }}
+        <input type="submit" value="Zarejestruj">
     </form>
 {% endblock %}
