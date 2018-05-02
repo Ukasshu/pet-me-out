@@ -1,6 +1,6 @@
 {% block content %}
     <h2>Registration</h2>
-    <form method="post">
+    <form method="post" action="/home/registration">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Zarejestruj">

@@ -7,6 +7,6 @@ class RegisterForm(forms.Form):
     lastName = forms.CharField(label="Nazwisko", max_length=50)
     mail = forms.EmailField(label="Mail", max_length=100)
     city = forms.CharField(label="Miasto", max_length=30)
-    contact = forms.CharField(label="Kontakt", max_length=15)
+    contact = forms.IntegerField(label="Kontakt")
     dateOfBirth = forms.DateField(label="Data urodzenia", widget=MyDateInput)
     password = forms.CharField(widget=forms.PasswordInput, label="Hasło", max_length=50)
