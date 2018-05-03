@@ -10,3 +10,8 @@ class RegisterForm(forms.Form):
     contact = forms.IntegerField(label="Kontakt")
     dateOfBirth = forms.DateField(label="Data urodzenia", widget=MyDateInput)
     password = forms.CharField(widget=forms.PasswordInput, label="Hasło", max_length=50)
+
+
+class LogInForm(forms.Form):
+    login = forms.EmailField(label="Mail", max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput, label="Hasło", max_length=50)

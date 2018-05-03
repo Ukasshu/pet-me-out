@@ -3,18 +3,21 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.template import loader
 
-from .forms import RegisterForm
+from .forms import RegisterForm, LogInForm
 
 from .models import User
 
+
 # Create your views here.
 def home(request):
-   # template = loader.get_template('home/welcomePage.html')
+    # template = loader.get_template('home/welcomePage.html')
     return HttpResponse(render(request, 'home/welcomePage.html'))
+
 
 def register(request):
     form = RegisterForm()
     return render(request, 'home/register.html', {'form': form})
+
 
 def registration(request):
     if request.method == "POST":
@@ -28,14 +31,33 @@ def registration(request):
             dateOfBirth = form.cleaned_data['dateOfBirth']
             password = form.cleaned_data['password']
             user = User.objects.create(
-                firstName = firstName,
-                lastName = lastName,
-                mail = mail,
-                city = city,
-                contact = contact,
-                dateOfBirth = dateOfBirth,
-                password = password,
+                firstName=firstName,
+                lastName=lastName,
+                mail=mail,
+                city=city,
+                contact=contact,
+                dateOfBirth=dateOfBirth,
+                password=password,
             )
             return HttpResponse("<h2>SUCCESS</h2>")
     else:
         return redirect("/home")
+
+
+def log_in(request):
+    logInForm = LogInForm()
+    return render(request, 'home/login.html', {'form': logInForm})
+
+
+def login(request):
+    if request.method == "POST":
+        form = LogInForm(request.POST)
+        if form.is_valid():
+            login = form.cleaned_data['login']
+            password = form.cleaned_data['password']
+            users = User.objects.all()
+            for user in users:
+                if user.mail == login and user.password == password:
+                    return HttpResponse("<h2>Success :)</h2>")
+                else:
+                    return redirect("/home")
