@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.template import loader
-
+from django.contrib.auth import authenticate, login
 from .forms import RegisterForm, LogInForm
+from django.contrib.auth import (login as auth_login, authenticate)
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 from .models import User
 
@@ -51,13 +54,11 @@ def log_in(request):
 
 def login(request):
     if request.method == "POST":
-        form = LogInForm(request.POST)
-        if form.is_valid():
-            login = form.cleaned_data['login']
-            password = form.cleaned_data['password']
-            users = User.objects.all()
-            for user in users:
-                if user.mail == login and user.password == password:
-                    return HttpResponse("<h2>Success :)</h2>")
-                else:
-                    return redirect("/home")
+        _username = request.POST['username']
+        _password = request.POST['password']
+        users = User.objects.all()
+        for user in users:
+            if user.mail == _username and user.password == _password:
+                return HttpResponse("<h2>Success :)</h2>")
+            else:
+                return redirect("/home/login")
