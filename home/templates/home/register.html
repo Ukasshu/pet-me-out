@@ -2,7 +2,7 @@
     <h2>Registration</h2>
     <form method="post" action="/home/registration">
         {% csrf_token %}
-        {{ form }}
+        {{ form.as_p }}
         <input type="submit" value="Zarejestruj">
     </form>
 {% endblock %}

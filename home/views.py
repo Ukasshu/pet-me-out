@@ -33,16 +33,23 @@ def registration(request):
             contact = form.cleaned_data['contact']
             dateOfBirth = form.cleaned_data['dateOfBirth']
             password = form.cleaned_data['password']
-            user = User.objects.create(
-                firstName=firstName,
-                lastName=lastName,
-                mail=mail,
-                city=city,
-                contact=contact,
-                dateOfBirth=dateOfBirth,
-                password=password,
-            )
-            return HttpResponse("<h2>SUCCESS</h2>")
+            if User.objects.filter(mail=mail).count() > 0:
+                response = HttpResponse(render(request, 'home/register.html', {'form': form}))
+                response.write("This mail already has an account")
+                return response
+            else:
+                user = User.objects.create(
+                    firstName=firstName,
+                    lastName=lastName,
+                    mail=mail,
+                    city=city,
+                    contact=contact,
+                    dateOfBirth=dateOfBirth,
+                    password=password,
+                )
+                return HttpResponse("<h2>SUCCESS</h2>")
+        else:
+            return render(request, 'home/register.html', {'form': form})
     else:
         return redirect("/home")
 
