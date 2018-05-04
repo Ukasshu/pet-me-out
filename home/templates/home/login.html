@@ -1,6 +1,14 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% if messages %}
+    <div class="alert alert-danger" role="alert" style="text-align:center;">
+        {% for message in messages %}
+            {% if message.tags %} {% endif %}{{ message }}
+            <a href="#" class="alert-link"/>
+        {% endfor %}
+    </div>
+{% endif %}
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
 <div class="container" style="position: center;">
     <div class="row">
@@ -14,10 +22,11 @@
                         Sign in
                     </button>
                     <label class="checkbox pull-left">
-                        <input type="checkbox" value="remember-me">
+                        <input type="checkbox" value="remember-me" name="remember_me">
                         Remember me
                     </label>
-                    <a href="" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                    <a href="{% url 'home' %}" class="pull-right need-help">Need help? </a><span
+                            class="clearfix"></span>
                 </form>
             </div>
             <a href="register" class="text-center new-account">Create an account </a>

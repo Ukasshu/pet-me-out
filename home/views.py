@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth import authenticate, login
 from .forms import RegisterForm, LogInForm
-from django.contrib.auth import (login as auth_login, authenticate)
+from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
@@ -58,7 +58,15 @@ def login(request):
         _password = request.POST['password']
         users = User.objects.all()
         for user in users:
+            # to do - nie działa :/
+            if not request.POST.get('remember_me', None):
+                request.session.set_expiry(0)
             if user.mail == _username and user.password == _password:
                 return HttpResponse("<h2>Success :)</h2>")
+            if user.mail == _username and not user.password == _password:
+                messages.info(request, 'Your password is not valid, please check it out!')
+                return redirect("/home/login")
             else:
+                messages.info(request,
+                              'Your login is not valid.' + "\n" + 'If you are not registered, please see the option below the login form.')
                 return redirect("/home/login")
