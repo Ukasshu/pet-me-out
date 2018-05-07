@@ -1,0 +1,21 @@
+html,body {
+  height: 100%;
+}
+
+.bck-img {
+    background-image: url("https://image.ibb.co/eTm9yn/hhen.png");
+
+    height: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bck-img-text {
+
+    color: #3b3923;
+    font-size: 24px;
+    font-weight: lighter;
+    line-height: 1.1;
+    margin-top: 5px;
+}
