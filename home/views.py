@@ -52,6 +52,9 @@ def registration(request):
 
 def log_in(request):
     logInForm = LogInForm()
+    if 'id' in request.session:
+        print(request.session['id'])
+        print(request.session.get_expire_at_browser_close())
     return render(request, 'home/login.html', {'form': logInForm})
 
 
@@ -68,11 +71,11 @@ def login(request):
                 return HttpResponse("<h2>Success :)</h2>")
             elif not user.password == _password:
                 messages.info(request, 'Your password is not valid, please check it out!')
-                return redirect("/home/login")
+                return redirect("/login")
             else:
                 messages.info(request,
                               'Your login is not valid.' + "\n" + 'If you are not registered, please see the option below the login form.')
-                return redirect("/home/login")
+                return redirect("/login")
         except User.DoesNotExist:
             messages.info(request, 'Before login you have to register')
-            return redirect("/home/login")
+            return redirect("/login")
