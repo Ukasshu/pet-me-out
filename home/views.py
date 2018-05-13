@@ -1,12 +1,8 @@
-from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
-from django.template import loader
-from django.contrib.auth import authenticate, login
 from .forms import RegisterForm, LogInForm
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 
 from .models import User
 
@@ -26,12 +22,12 @@ def registration(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            firstName = form.cleaned_data['firstName']
-            lastName = form.cleaned_data['lastName']
+            first_name = form.cleaned_data['firstName']
+            last_name = form.cleaned_data['lastName']
             mail = form.cleaned_data['mail']
             city = form.cleaned_data['city']
             contact = form.cleaned_data['contact']
-            dateOfBirth = form.cleaned_data['dateOfBirth']
+            date_of_birth = form.cleaned_data['dateOfBirth']
             password = form.cleaned_data['password']
             if User.objects.filter(mail=mail).count() > 0:
                 response = HttpResponse(render(request, 'home/register.html', {'form': form}))
@@ -39,12 +35,12 @@ def registration(request):
                 return response
             else:
                 user = User.objects.create(
-                    firstName=firstName,
-                    lastName=lastName,
+                    firstName=first_name,
+                    lastName=last_name,
                     mail=mail,
                     city=city,
                     contact=contact,
-                    dateOfBirth=dateOfBirth,
+                    dateOfBirth=date_of_birth,
                     password=password,
                 )
                 return HttpResponse("<h2>SUCCESS</h2>")
@@ -63,17 +59,20 @@ def login(request):
     if request.method == "POST":
         _username = request.POST['username']
         _password = request.POST['password']
-        users = User.objects.all()
-        for user in users:
-            # to do - nie działa :/
-            if not request.POST.get('remember_me', None):
-                request.session.set_expiry(0)
-            if user.mail == _username and user.password == _password:
+        try:
+            user = User.objects.filter(mail=_username).first()
+            if user.password == _password:
+                request.session['id'] = user.id  # TODO: testowanie sesji
+                if not request.POST.get('remember_me', None):
+                    request.session.set_expiry(0)
                 return HttpResponse("<h2>Success :)</h2>")
-            if user.mail == _username and not user.password == _password:
+            elif not user.password == _password:
                 messages.info(request, 'Your password is not valid, please check it out!')
                 return redirect("/home/login")
             else:
                 messages.info(request,
                               'Your login is not valid.' + "\n" + 'If you are not registered, please see the option below the login form.')
                 return redirect("/home/login")
+        except User.DoesNotExist:
+            messages.info(request, 'Before login you have to register')
+            return redirect("/home/login")
