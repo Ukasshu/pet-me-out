@@ -30,8 +30,9 @@ def registration(request):
             date_of_birth = form.cleaned_data['dateOfBirth']
             password = form.cleaned_data['password']
             if User.objects.filter(mail=mail).count() > 0:
+                messages.info(request, "This mail already has an account")
                 response = HttpResponse(render(request, 'home/register.html', {'form': form}))
-                response.write("This mail already has an account")
+                # response.write("This mail already has an account")
                 return response
             else:
                 user = User.objects.create(
@@ -43,7 +44,8 @@ def registration(request):
                     dateOfBirth=date_of_birth,
                     password=password,
                 )
-                return HttpResponse("<h2>SUCCESS</h2>")
+                messages.info(request, "Registration success")
+                return redirect('/login')
         else:
             return render(request, 'home/register.html', {'form': form})
     else:
@@ -62,13 +64,16 @@ def login(request):
     if request.method == "POST":
         _username = request.POST['username']
         _password = request.POST['password']
-        try:
-            user = User.objects.filter(mail=_username).first()
+        user = User.objects.filter(mail=_username).first()
+        if user is None:
+            messages.info(request, 'Before login you have to register')
+            return redirect("/login")
+        else:
             if user.password == _password:
                 request.session['id'] = user.id  # TODO: testowanie sesji
                 if not request.POST.get('remember_me', None):
                     request.session.set_expiry(0)
-                return HttpResponse("<h2>Success :)</h2>")
+                    return render(request, 'home/profile.html', {'user': user})
             elif not user.password == _password:
                 messages.info(request, 'Your password is not valid, please check it out!')
                 return redirect("/login")
@@ -76,6 +81,25 @@ def login(request):
                 messages.info(request,
                               'Your login is not valid.' + "\n" + 'If you are not registered, please see the option below the login form.')
                 return redirect("/login")
-        except User.DoesNotExist:
-            messages.info(request, 'Before login you have to register')
-            return redirect("/login")
+    else:
+        return redirect("/")
+
+
+def profile(request):
+    if request.method == "GET":
+        if 'id' not in request.GET:
+            _id = request.session['id']
+            user = User.objects.filter(id=_id).first()
+            if not user is None:
+                return render(request, 'home/profile.html', {'user': user})
+            else:
+                return redirect("/")
+        else:
+            _id = request.GET['id']
+            user = User.objects.filter(id=_id).first()
+            if not user is None:
+                return render(request, 'home/profile.html', {'user': user})
+            else:
+                return redirect("/")
+    else:
+        return redirect("/")
