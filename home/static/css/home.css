@@ -1,0 +1,40 @@
+html,body {
+  height: 100%;
+}
+
+body { padding-top: 45px;
+}
+
+
+.bck-img {
+    background-image: url("https://image.ibb.co/bU8k67/kury.png");
+
+
+
+    height: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bck-img-h1 {
+
+    text-align: center;
+    color: #3b3923;
+    font-size: 34px;
+    font-weight: lighter;
+    line-height: 1.1;
+    margin-top: 5px;
+    padding-top: 200px;
+}
+
+.bck-img-h2 {
+
+    text-align: center;
+    color: #3b3923;
+    font-size: 24px;
+    font-weight: lighter;
+    line-height: 1.1;
+    margin-top: 10px;
+    padding: 20px;
+}
