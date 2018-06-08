@@ -1,16 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
 
-class User(models.Model):
-    firstName = models.CharField(max_length=30, default=None)
-    lastName = models.CharField(max_length=50, default=None)
+class UserData(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, default=None, unique=True)
     city = models.CharField(max_length=30, default=None)
     contact = models.CharField(max_length=15, default=None)
-    mail = models.CharField(max_length=100, default=None)
     dateOfBirth = models.DateField(default=None)
-    password = models.CharField(max_length=50, default=None)
 
 
 class Pet(models.Model):

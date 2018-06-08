@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from .models import User
+from .models import UserData
 
 
 # Create your views here.
@@ -22,27 +23,29 @@ def registration(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            first_name = form.cleaned_data['firstName']
-            last_name = form.cleaned_data['lastName']
-            mail = form.cleaned_data['mail']
-            city = form.cleaned_data['city']
-            contact = form.cleaned_data['contact']
-            date_of_birth = form.cleaned_data['dateOfBirth']
-            password = form.cleaned_data['password']
-            if User.objects.filter(mail=mail).count() > 0:
+            first_name = form.cleaned_data.get('firstName')
+            last_name = form.cleaned_data.get('lastName')
+            mail = form.cleaned_data.get('mail')
+            city = form.cleaned_data.get('city')
+            contact = form.cleaned_data.get('contact')
+            date_of_birth = form.cleaned_data.get('dateOfBirth')
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            if User.objects.filter(email=mail).count() > 0:
                 messages.info(request, "This mail already has an account")
                 response = HttpResponse(render(request, 'home/register.html', {'form': form}))
                 # response.write("This mail already has an account")
                 return response
             else:
-                user = User.objects.create(
-                    firstName=first_name,
-                    lastName=last_name,
-                    mail=mail,
+                user = User.objects.create_user(username, mail, password)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+                userData = UserData.objects.create(
                     city=city,
                     contact=contact,
                     dateOfBirth=date_of_birth,
-                    password=password,
+                    userId=user
                 )
                 messages.info(request, "Registration success")
                 return redirect('/login')
