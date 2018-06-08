@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from .forms import RegisterForm, LogInForm
 from django.contrib import messages
 from django.shortcuts import render
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as auth_login
 
 from .models import User
 from .models import UserData
@@ -65,27 +67,28 @@ def log_in(request):
 
 def login(request):
     if request.method == "POST":
-        _username = request.POST['username']
-        _password = request.POST['password']
-        user = User.objects.filter(mail=_username).first()
-        if user is None:
-            messages.info(request, 'Before login you have to register')
-            return redirect("/login")
-        else:
-            if user.password == _password:
-                request.session['id'] = user.id  # TODO: testowanie sesji
-                if not request.POST.get('remember_me', None):
-                    request.session.set_expiry(0)
-                    return render(request, 'home/profile.html', {'user': user})
-            elif not user.password == _password:
-                messages.info(request, 'Your password is not valid, please check it out!')
-                return redirect("/login")
+        form = LogInForm(request.POST)
+        if form.is_valid():
+            _username = form.cleaned_data.get('username')
+            _password = form.cleaned_data.get('password')
+            user = authenticate(request, username=_username, password=_password)
+            if user is not None:
+                auth_login(request, user)
+                messages.info(request, "Login success")
+                return redirect("/")
             else:
-                messages.info(request,
-                              'Your login is not valid.' + "\n" + 'If you are not registered, please see the option below the login form.')
-                return redirect("/login")
+                messages.info(request, "Cannot authenticate user")
+                return render(request, "/login", form)
+        else:
+            messages.info(request, "Form is not valid")
+            return render(request, "/login", form)
     else:
         return redirect("/")
+
+
+def logout(request):
+    logout(request)
+    return redirect("/")
 
 
 def profile(request):

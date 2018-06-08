@@ -27,5 +27,7 @@ class RegisterForm(forms.Form):
 
 
 class LogInForm(forms.Form):
-    login = forms.EmailField(label="Mail", max_length=100)
-    password = forms.CharField(widget=forms.PasswordInput, label="Hasło", max_length=50)
+    username = forms.CharField(label="", max_length=20,
+                               widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
+                               label="", max_length=50)
