@@ -2,38 +2,76 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% block content %}
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
-    <div class="container">
     <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="btn-group pull-right">
-                    <a href="{% url 'login' %}" class="btn btn-lg btn-primary btn-block">Logout </a>
-                </div>
-
-                <h4 style="font-family:lobster; text-align: center">User Profile</h4>
-            </div>
-            <div class="panel-body">
-                <div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
-                    <img alt="User Pic"
-                         src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
-                         id="profile-image1" class="img-circle img-responsive">
-                </div>
-                <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8">
-                    {% csrf_token %}
-                    <div class="container">
-                        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <div class="col-xs-3">
+            <div class="panel panel-default">
+                <div class="container" style="position: center;">
+                    <div class="card hovercard">
+                        <div class="container">
+                            <div class="row">
+                                <div class="profile-header-container">
+                                    <div class="profile-header-img">
+                                        <img class="img-circle"
+                                             src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
+                                             style="width: 200px; height: 200px;"/>
+                                        <div class="rank-label-container">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-info"><span class="card-title"></span>
+                        </div>
                     </div>
-                    <hr>
-                    <ul class="container details">
-                        <li><p><span class="glyphicon glyphicon-phone-alt" style="width:50px;"></span>{{ user.contact }}
-                        </p></li>
-                        <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span>{{ user.mail }}
-                        <li><p><span class="glyphicon glyphicon-home" style="width:50px;"></span>{{ user.city }}
-                        </p></li>
-                    </ul>
-                    <hr>
-                    <div class="col-sm-5 col-xs-6 tital ">Description</div>
+                    <div class="col-md-3">
+                        <ul class="nav nav-pills nav-stacked admin-menu">
+                            <li class="active"><a href="" data-target-id="profile"><i
+                                    class="glyphicon glyphicon-user"></i> Profile</a></li>
+                            <li><a href="" data-target-id="aboutMe"><i
+                                    class="glyphicon glyphicon-pencil"></i> About me</a></li>
+                            <li><a href="" data-target-id="pets"><i class="glyphicon glyphicon-heart"></i> Pets</a></li>
+                            <li><a href="" data-target-id="calendar"><i
+                                    class="glyphicon glyphicon-calendar"></i> My calendar</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="col-md-9 admin-content" id="profile">
+                        {% csrf_token %}
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Name</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ user.firstName }} {{ user.lastName }}
+                            </div>
+                        </div>
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Email</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ user.mail }}
+                            </div>
+                        </div>
+
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">City</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ user.city }}
+                            </div>
+                        </div>
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Phone number</h3>
+                            </div>
+                            <div class="panel-body">
+                                {{ user.contact }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
