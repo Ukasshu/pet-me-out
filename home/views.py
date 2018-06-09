@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from .forms import RegisterForm, LogInForm
 from django.contrib import messages
 from django.shortcuts import render
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 
 from .models import User
@@ -78,34 +79,65 @@ def login(request):
                 return redirect("/")
             else:
                 messages.info(request, "Cannot authenticate user")
-                return render(request, "/login", form)
+                return render(request, "home/login.html", {'form': form})
         else:
             messages.info(request, "Form is not valid")
-            return render(request, "/login", form)
+            return render(request, "home/login.html", {'form': form})
     else:
         return redirect("/")
 
 
 def logout(request):
-    logout(request)
+    auth_logout(request)
     return redirect("/")
 
 
 def profile(request):
     if request.method == "GET":
-        if 'id' not in request.GET:
-            _id = request.session['id']
+        _id = request.GET.get('id')
+        if _id is not None:
             user = User.objects.filter(id=_id).first()
-            if not user is None:
-                return render(request, 'home/profile.html', {'user': user})
+            user_data = UserData.objects.filter(userId=user).first()
+            if user is not None and user_data is not None:
+                return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout':False})
             else:
-                return redirect("/")
+                return redirect("/profile")
         else:
-            _id = request.GET['id']
-            user = User.objects.filter(id=_id).first()
-            if not user is None:
-                return render(request, 'home/profile.html', {'user': user})
+            if request.user.is_authenticated:
+                user = request.user
+                user_data = UserData.objects.filter(userId=user).first()
+                if user is not None and user_data is not None:
+                    return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout':True})
+                else:
+                    return redirect("/")
             else:
                 return redirect("/")
     else:
+        return redirect('/')
+
+
+'''
+ def profile(request):
+    if request.method == "GET":
+        print(request.user.is_authenticated)
+        print(request.user)
+        if request.user.is_authenticated:
+            user = request.user
+            user_data = UserData.objects.filter(userId=user).first()
+            if not user is None and not user_data is None:
+                return render(request, 'home/profile.html', {'user': user, 'user_data':user_data})
+            else:
+                return redirect("/")
+        else:
+            _id = request.GET.get('id')
+            print(_id)
+            if _id is not None:
+                user = User.objects.filter(id=_id).first()
+                user_data = UserData.objects.filter(userId=user).first()
+                if not user is None:
+                    return render(request, 'home/profile.html', {'user': user, 'user_data':user_data})
+                else:
+                    return redirect("/")
+    else:
         return redirect("/")
+'''

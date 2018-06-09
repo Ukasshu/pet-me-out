@@ -32,6 +32,10 @@
                             <li><a href="" data-target-id="pets"><i class="glyphicon glyphicon-heart"></i> Pets</a></li>
                             <li><a href="" data-target-id="calendar"><i
                                     class="glyphicon glyphicon-calendar"></i> My calendar</a></li>
+                            {% if logout %}
+                            <li><a href="/logout"><i
+                                    class="glyphicon glyphicon-lock"></i> Logout</a></li>
+                            {% endif %}
                         </ul>
                     </div>
 
@@ -43,7 +47,7 @@
                                 <h3 class="panel-title">Name</h3>
                             </div>
                             <div class="panel-body">
-                                {{ user.firstName }} {{ user.lastName }}
+                                {{ user.first_name }} {{ user.last_name }}
                             </div>
                         </div>
                         <div class="panel panel-info" style="margin: 1em;">
@@ -51,7 +55,7 @@
                                 <h3 class="panel-title">Email</h3>
                             </div>
                             <div class="panel-body">
-                                {{ user.mail }}
+                                {{ user.email }}
                             </div>
                         </div>
 
@@ -60,7 +64,7 @@
                                 <h3 class="panel-title">City</h3>
                             </div>
                             <div class="panel-body">
-                                {{ user.city }}
+                                {{ user_data.city }}
                             </div>
                         </div>
                         <div class="panel panel-info" style="margin: 1em;">
@@ -68,7 +72,7 @@
                                 <h3 class="panel-title">Phone number</h3>
                             </div>
                             <div class="panel-body">
-                                {{ user.contact }}
+                                {{ user_data.contact }}
                             </div>
                         </div>
                     </div>
