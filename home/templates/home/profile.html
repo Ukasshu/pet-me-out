@@ -1,6 +1,9 @@
+{% extends "base.html" %}
+
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+
 {% block content %}
     <div class="row">
         <div class="col-xs-3">
@@ -13,7 +16,7 @@
                                     <div class="profile-header-img">
                                         <img class="img-circle"
                                              src={{ user_data.photo.url }}
-                                             style="width: 200px; height: 200px;"/>
+                                                     style="width: 200px; height: 200px;"/>
                                         <div class="rank-label-container">
                                         </div>
                                     </div>
@@ -33,8 +36,8 @@
                             <li><a href="" data-target-id="calendar"><i
                                     class="glyphicon glyphicon-calendar"></i> My calendar</a></li>
                             {% if logout %}
-                            <li><a href="/logout"><i
-                                    class="glyphicon glyphicon-lock"></i> Logout</a></li>
+                                <li><a href="/logout"><i
+                                        class="glyphicon glyphicon-lock"></i> Logout</a></li>
                             {% endif %}
                         </ul>
                     </div>
