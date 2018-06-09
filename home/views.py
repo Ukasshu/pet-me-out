@@ -13,17 +13,19 @@ from .models import UserData
 
 # Create your views here.
 def home(request):
-    # template = loader.get_template('home/welcomePage.html')
     return HttpResponse(render(request, 'home/welcomePage.html'))
 
 
 def register(request):
-    form = RegisterForm()
-    return render(request, 'home/register.html', {'form': form})
+    if not request.user.is_authenticated:
+        form = RegisterForm()
+        return render(request, 'home/register.html', {'form': form})
+    else:
+        return redirect("/")
 
 
 def registration(request):
-    if request.method == "POST":
+    if request.method == "POST" and not request.user.is_authenticated:
         form = RegisterForm(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data.get('firstName')
@@ -37,7 +39,6 @@ def registration(request):
             if User.objects.filter(email=mail).count() > 0:
                 messages.info(request, "This mail already has an account")
                 response = HttpResponse(render(request, 'home/register.html', {'form': form}))
-                # response.write("This mail already has an account")
                 return response
             else:
                 user = User.objects.create_user(username, mail, password)
@@ -55,19 +56,19 @@ def registration(request):
         else:
             return render(request, 'home/register.html', {'form': form})
     else:
-        return redirect("/home")
+        return redirect("/")
 
 
 def log_in(request):
-    logInForm = LogInForm()
-    if 'id' in request.session:
-        print(request.session['id'])
-        print(request.session.get_expire_at_browser_close())
-    return render(request, 'home/login.html', {'form': logInForm})
+    if not request.user.is_authenticated:
+        logInForm = LogInForm()
+        return render(request, 'home/login.html', {'form': logInForm})
+    else:
+        return redirect("/")
 
 
 def login(request):
-    if request.method == "POST":
+    if request.method == "POST" and not request.user.is_authenticated:
         form = LogInForm(request.POST)
         if form.is_valid():
             _username = form.cleaned_data.get('username')
@@ -88,7 +89,8 @@ def login(request):
 
 
 def logout(request):
-    auth_logout(request)
+    if request.user.is_authenticated:
+        auth_logout(request)
     return redirect("/")
 
 
@@ -99,7 +101,7 @@ def profile(request):
             user = User.objects.filter(id=_id).first()
             user_data = UserData.objects.filter(userId=user).first()
             if user is not None and user_data is not None:
-                return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout':False})
+                return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout': False})
             else:
                 return redirect("/profile")
         else:
@@ -107,37 +109,10 @@ def profile(request):
                 user = request.user
                 user_data = UserData.objects.filter(userId=user).first()
                 if user is not None and user_data is not None:
-                    return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout':True})
+                    return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout': True})
                 else:
                     return redirect("/")
             else:
                 return redirect("/")
     else:
         return redirect('/')
-
-
-'''
- def profile(request):
-    if request.method == "GET":
-        print(request.user.is_authenticated)
-        print(request.user)
-        if request.user.is_authenticated:
-            user = request.user
-            user_data = UserData.objects.filter(userId=user).first()
-            if not user is None and not user_data is None:
-                return render(request, 'home/profile.html', {'user': user, 'user_data':user_data})
-            else:
-                return redirect("/")
-        else:
-            _id = request.GET.get('id')
-            print(_id)
-            if _id is not None:
-                user = User.objects.filter(id=_id).first()
-                user_data = UserData.objects.filter(userId=user).first()
-                if not user is None:
-                    return render(request, 'home/profile.html', {'user': user, 'user_data':user_data})
-                else:
-                    return redirect("/")
-    else:
-        return redirect("/")
-'''
