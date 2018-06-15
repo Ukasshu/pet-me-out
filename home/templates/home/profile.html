@@ -15,11 +15,11 @@
                                 <div class="profile-header-container">
                                     <div class="profile-header-img" style="position: relative">
                                         <div>
+                                            <img class="img-circle" {% if logout %} id="avatar" {% endif %}
+                                                 src={{ user_data.photo.url }} style="width:200px;height:200px;display:block"/>
                                             {% if logout %}
                                                 <a href="/addPhoto">
                                             {% endif %}
-                                            <img class="img-circle" {% if logout %} id="avatar" {% endif %}
-                                                 src={{ user_data.photo.url }} style="width:200px;height:200px;display:block"/>
                                             <img src="static/img/plus.png" id="plus"
                                                  style="width:200px;height:200px;"/>
                                             {% if logout %}

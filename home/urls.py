@@ -1,5 +1,4 @@
-from django.urls import path
-from django.conf.urls import url
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
@@ -11,5 +10,7 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('logout', views.logout, name='logout'),
     path('addPhoto', views.add_photo, name='addPhoto'),
-    path('uploadPhoto', views.upload_photo, name='uploadPhoto')
+    path('uploadPhoto', views.upload_photo, name='uploadPhoto'),
+    path('addPet', views.add_pet, name='add_pet'),
+    path("404", views.not_found, name='not_found')
 ]

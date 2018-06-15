@@ -20,6 +20,7 @@ class Pet(models.Model):
     type = models.CharField(max_length=30, default=None)
     breed = models.CharField(max_length=30, default=None)
     age = models.IntegerField(default=None)
+    photo = models.ImageField(upload_to='home/pic_folder/pets/', default='no-img.jpg')
 
 
 class Stay(models.Model):

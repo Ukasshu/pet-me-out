@@ -140,3 +140,11 @@ def upload_photo(request):
             return redirect("/addPhoto", {'form' : form})
     else:
         return redirect('/')
+
+
+def add_pet(request):
+    form = AddPetForm(request.POST)
+    return render(request, 'home/add_pet.html', {'form': form})
+
+def not_found(request):
+    return render(request, 'home/not_found.html')

@@ -1,6 +1,14 @@
 from django import forms
 from django.core.validators import RegexValidator
 
+PET_TYPE_CHOICES = (
+    ("DOG", "Dog"),
+    ("CAT", "Cat"),
+    ("HAMSTER", "Hamster"),
+    ("BIRD", "Bird"),
+    ("OTHER", "Other")
+)
+
 
 class RegisterForm(forms.Form):
     class MyDateInput(forms.DateInput):  # inner class for input type date - otherwise render as text input
@@ -35,3 +43,10 @@ class LogInForm(forms.Form):
 
 class ImageUploadForm(forms.Form):
     image = forms.ImageField()
+
+
+class AddPetForm(forms.Form):
+    name = forms.CharField(label="", max_length=30)
+    weight = forms.FloatField(min_value=0)
+    height = forms.FloatField(min_value=0)
+    type = forms.ChoiceField(choices=PET_TYPE_CHOICES)
