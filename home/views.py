@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.http import HttpResponse
-from .forms import RegisterForm, LogInForm
+from .forms import *
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth import authenticate
@@ -114,5 +114,29 @@ def profile(request):
                     return redirect("/")
             else:
                 return redirect("/")
+    else:
+        return redirect('/')
+
+
+def add_photo(request):
+    if request.user.is_authenticated:
+        form = ImageUploadForm(request.POST)
+        return render(request, 'home/upload_photo.html', {'form': form})
+    else:
+        redirect('/')
+
+
+def upload_photo(request):
+    if request.user.is_authenticated and request.method == "POST":
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_id = request.user
+            user_data = UserData.objects.filter(userId=user_id).first()
+            user_data.photo = form.cleaned_data.get('image')
+            user_data.save()
+
+            return redirect('/profile')
+        else:
+            return redirect("/addPhoto", {'form' : form})
     else:
         return redirect('/')

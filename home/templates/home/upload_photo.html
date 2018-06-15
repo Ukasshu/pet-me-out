@@ -1,0 +1,14 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+{% block content %}
+
+<form method="post" action="/uploadPhoto"  enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
+</form>
+
+{% endblock %}

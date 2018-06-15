@@ -31,3 +31,7 @@ class LogInForm(forms.Form):
                                widget=forms.TextInput(attrs={'placeholder': 'Username', 'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
                                label="", max_length=50)
+
+
+class ImageUploadForm(forms.Form):
+    image = forms.ImageField()

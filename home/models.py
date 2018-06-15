@@ -9,7 +9,7 @@ class UserData(models.Model):
     city = models.CharField(max_length=30, default=None)
     contact = models.CharField(max_length=15, default=None)
     dateOfBirth = models.DateField(default=None)
-    photo = models.ImageField(upload_to='home/pic_folder/', default='home/pic_folder/None/no-img.jpg')
+    photo = models.ImageField(upload_to='home/pic_folder/', default='no-img.jpg')
 
 
 class Pet(models.Model):
