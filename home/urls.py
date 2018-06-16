@@ -12,5 +12,6 @@ urlpatterns = [
     path('addPhoto', views.add_photo, name='addPhoto'),
     path('uploadPhoto', views.upload_photo, name='uploadPhoto'),
     path('addPet', views.add_pet, name='add_pet'),
+    path('createPet', views.create_pet, name='create_pet'),
     path("404", views.not_found, name='not_found')
 ]

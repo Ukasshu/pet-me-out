@@ -46,7 +46,15 @@ class ImageUploadForm(forms.Form):
 
 
 class AddPetForm(forms.Form):
-    name = forms.CharField(label="", max_length=30)
-    weight = forms.FloatField(min_value=0)
-    height = forms.FloatField(min_value=0)
-    type = forms.ChoiceField(choices=PET_TYPE_CHOICES)
+    name = forms.CharField(label="", max_length=30, required=True,
+                           widget=forms.TextInput(attrs={'placeholder': 'Name', 'class': 'form-control'}))
+    weight = forms.FloatField(label="", min_value=0, required=False,
+                              widget=forms.NumberInput(attrs={'placeholder': 'Weight', 'class': 'form-control'}))
+    height = forms.FloatField(label="", min_value=0, required=False,
+                              widget=forms.NumberInput(attrs={'placeholder': 'Height', 'class': 'form-control'}))
+    type = forms.ChoiceField(label="", choices=PET_TYPE_CHOICES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+    other = forms.CharField(label="", required=False, widget=forms.TextInput(attrs={'placeholder': 'Other', 'style': "visibility=hidden;",'class': 'form-control'}))
+    breed = forms.CharField(label="", required=False, widget=forms.TextInput(attrs={'placeholder': 'Breed', 'class': 'form-control'}))
+    age = forms.IntegerField(label="", min_value=0, required=True,
+                             widget=forms.NumberInput(attrs={'placeholder': 'Age (years)', 'class': 'form-control'}))
+    img = forms.ImageField(label="", required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))

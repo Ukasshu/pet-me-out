@@ -7,8 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 
-from .models import User
-from .models import UserData
+from .models import User, UserData, Pet
 
 
 # Create your views here.
@@ -95,14 +94,18 @@ def logout(request):
 
 
 def profile(request):
-    if request.method == "GET":
+    if request.method == "GET" and request.user.is_authenticated:
         _id = request.GET.get('id')
         if _id is not None:
-            user = User.objects.filter(id=_id).first()
-            user_data = UserData.objects.filter(userId=user).first()
-            if user is not None and user_data is not None:
-                return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout': False})
-            else:
+            try:
+                _id = int(_id)
+                user = User.objects.filter(id=_id).first()
+                user_data = UserData.objects.filter(userId=user).first()
+                if user is not None and user_data is not None:
+                    return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout': False})
+                else:
+                    return redirect("/profile")
+            except ValueError:
                 return redirect("/profile")
         else:
             if request.user.is_authenticated:
@@ -120,7 +123,7 @@ def profile(request):
 
 def add_photo(request):
     if request.user.is_authenticated:
-        form = ImageUploadForm(request.POST)
+        form = ImageUploadForm()
         return render(request, 'home/upload_photo.html', {'form': form})
     else:
         redirect('/')
@@ -137,14 +140,58 @@ def upload_photo(request):
 
             return redirect('/profile')
         else:
-            return redirect("/addPhoto", {'form' : form})
+            return redirect("/addPhoto", {'form': form})
     else:
         return redirect('/')
 
 
 def add_pet(request):
-    form = AddPetForm(request.POST)
+    form = AddPetForm()
     return render(request, 'home/add_pet.html', {'form': form})
+
+
+def create_pet(request):
+    if request.user.is_authenticated and request.method == "POST":
+        form = AddPetForm(request.POST, request.FILES)
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            _type = form.cleaned_data.get('type')
+            weight = None
+            if form.cleaned_data.get('weight') is not None:
+                weight = float(form.cleaned_data.get('weight'))
+            height = None
+            if form.cleaned_data.get('height') is not None:
+                height = float(form.cleaned_data.get('height'))
+            other = None
+            if _type == "OTHER" and form.cleaned_data.get('other') is not None:
+                other = form.cleaned_data.get('other')
+            breed = None
+            if form.cleaned_data.get('type') is not None:
+                breed = form.cleaned_data.get('type')
+            age = form.cleaned_data.get('age')
+
+            user = request.user
+
+            pet = Pet.objects.create(
+                name=name,
+                weight=weight,
+                type=_type,
+                height=height,
+                other=other,
+                breed=breed,
+                age=age,
+                ownerId=user
+            )
+
+            if form.cleaned_data.get('img') is not None:
+                pet.photo = form.cleaned_data.get('img')
+                pet.save()
+
+            for f in form:
+                print(str(f.name) + ":" + str(f.data))
+            return redirect("profile")
+    return redirect("/")
+
 
 def not_found(request):
     return render(request, 'home/not_found.html')

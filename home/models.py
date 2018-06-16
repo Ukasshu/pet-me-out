@@ -15,12 +15,13 @@ class UserData(models.Model):
 class Pet(models.Model):
     ownerId = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=30, default=None)
-    weight = models.FloatField(default=None)
-    height = models.FloatField(default=None)
+    weight = models.FloatField(default=None, null=True)
+    height = models.FloatField(default=None, null=True)
     type = models.CharField(max_length=30, default=None)
-    breed = models.CharField(max_length=30, default=None)
+    other = models.CharField(max_length=30, default=None, null=True)
+    breed = models.CharField(max_length=30, default=None, null=True)
     age = models.IntegerField(default=None)
-    photo = models.ImageField(upload_to='home/pic_folder/pets/', default='no-img.jpg')
+    photo = models.ImageField(upload_to='home/pic_folder/pets/', default='no-animal-img.jpg')
 
 
 class Stay(models.Model):
