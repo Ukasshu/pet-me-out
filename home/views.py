@@ -101,8 +101,11 @@ def profile(request):
                 _id = int(_id)
                 user = User.objects.filter(id=_id).first()
                 user_data = UserData.objects.filter(userId=user).first()
+                pets = Pet.objects.filter(ownerId=user_data)
                 if user is not None and user_data is not None:
-                    return render(request, 'home/profile.html', {'user': user, 'user_data': user_data, 'logout': False})
+                    return render(request, 'home/profile.html',
+                                  {'user': user, 'user_data': user_data, 'pets': pets,
+                                   'logout': False})
                 else:
                     return redirect("/profile")
             except ValueError:

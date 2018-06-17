@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
+{% static 'static_jquery/js/jquery.js' %}
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -90,40 +91,51 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-9 admin-content" id="aboutMe">
-                    {% csrf_token %}
-                    <div class="panel panel-info" style="margin: 1em;">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Name</h3>
-                        </div>
-                        <div class="panel-body">
-                            {{ user.first_name }} {{ user.last_name }}
-                        </div>
-                    </div>
-                    <div class="panel panel-info" style="margin: 1em;">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Email</h3>
-                        </div>
-                        <div class="panel-body">
-                            {{ user.email }}
+
+                    <div class="col-md-9 admin-content" id="aboutMe">
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Admin</h3>
+
+                            </div>
+                            <div class="panel-body">
+                                <div class="label label-success">yes</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="panel panel-info" style="margin: 1em;">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">City</h3>
-                        </div>
-                        <div class="panel-body">
-                            {{ user_data.city }}
-                        </div>
-                    </div>
-                    <div class="panel panel-info" style="margin: 1em;">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Phone number</h3>
-                        </div>
-                        <div class="panel-body">
-                            {{ user_data.contact }}
+                    <div class="col-md-9 admin-content" id="pets">
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">My pets</h3>
+                            </div>
+                            <div class="panel-body">
+                                {% if pets == Nil %}
+                                    <p> You haven't added any pet</p>
+                                {% else %}
+                                    {% for pet in pets %}
+                                        <div class="col-xs-12 col-sm-8">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">Name: {{ pet.name }}</li>
+                                                <li class="list-group-item">Weight: {{ pet.weight }}</li>
+                                                <li class="list-group-item">Height: {{ pet.height }}</li>
+                                                <li class="list-group-item">Type: {{ pet.type }}</li>
+                                                <li class="list-group-item">Breed: {{ pet.breed }}</li>
+                                                <li class="list-group-item">Age: {{ pet.age }}</li>
+                                                {#zdjatko trzeba dodać jeszcze jakos ładnie xd#}
+                                            </ul>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <form class="form-login" method="post" action="/addPet">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+
+                                    <button class="btn btn-outline-primary" type="submit">
+                                        Add new pet
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,3 +143,22 @@
         </div>
     </div>
 {% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var navItems = $('.admin-menu li > a');
+            var navListItems = $('.admin-menu li');
+            var allWells = $('.admin-content');
+            var allWellsExceptFirst = $('.admin-content:not(:first)');
+            allWellsExceptFirst.hide();
+            navItems.click(function (e) {
+                e.preventDefault();
+                navListItems.removeClass('active');
+                $(this).closest('li').addClass('active');
+                allWells.hide();
+                var target = $(this).attr('data-target-id');
+                $('#' + target).show();
+            });
+        });
+    </script>
+{% endblock javascript %}
