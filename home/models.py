@@ -21,7 +21,7 @@ class Pet(models.Model):
     other = models.CharField(max_length=30, default=None, null=True)
     breed = models.CharField(max_length=30, default=None, null=True)
     age = models.IntegerField(default=None)
-    photo = models.ImageField(upload_to='home/pic_folder/pets/', default='no-animal-img.jpg')
+    photo = models.ImageField(upload_to='home/pic_folder/pets/', default='no-animal-img.png')
 
 
 class Stay(models.Model):
