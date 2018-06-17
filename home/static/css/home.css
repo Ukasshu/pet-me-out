@@ -3,15 +3,37 @@ html, body {
 }
 
 body {
-    padding-top: 45px;
+
+    position: relative;
+
 }
 
-.bck-img {
-    background-image: url("https://image.ibb.co/bU8k67/kury.png");
-    height: 100%;
+#content {
+    padding-top: 45px;
+    padding-bottom: 45px;
+}
+
+#backgrounds img{
+    position:fixed;
+    z-index:1; // this is important
+    top:0;
+    left:0;
+    width: 100%;
+    heigh: auto;
+    opacity:0;
+    display:none;
+}
+
+
+
+#bck-img-content {
+    position:relative;
+    z-index:3; // again, this is important
+
+/*    background-image: url("https://image.ibb.co/bU8k67/kury.png");
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover;*/
 }
 
 #nf-img {
@@ -31,6 +53,8 @@ body {
     line-height: 1.1;
     margin-top: 5px;
     padding-top: 200px;
+    size: auto;
+
 }
 
 .bck-img-h2 {
@@ -42,7 +66,9 @@ body {
     line-height: 1.1;
     margin-top: 10px;
     padding: 20px;
+    size: auto;
 }
+
 
 #plus {
     transition: 1s;

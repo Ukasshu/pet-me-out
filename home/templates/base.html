@@ -30,7 +30,7 @@
                 </button>
 
                 <div class="navbar-header">
-                    <a href="{% url 'home' %}" class="navbar-left"><img src="https://image.ibb.co/bxAh17/logo.jpg"></a>
+                    <a href="{% url 'home' %}" class="navbar-left"><img src="static/img/logo.png" style="height:55px;"></a>
                     </a>
                 </div>
 
@@ -57,5 +57,18 @@
 <div id="content">
     {% block content %}{% endblock %}
 </div>
+
+
+{% block footer %}
+
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">© 2018 Łukasz Mielczarek, Kinga Rzepecka, Maria Sosenkiewicz</span>
+      </div>
+    </footer>
+
+{% endblock %}
+
+
 </body>
 </html>
