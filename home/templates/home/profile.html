@@ -7,8 +7,6 @@
 {% load static %}
 
 
-
-
 {% block content %}
     <div class="row">
         <div class="col-xs-3">
@@ -24,8 +22,8 @@
                                                  src={{ user_data.photo.url }} style="width:200px;height:200px;display:block"/>
                                             {% if logout %}
                                                 <a href="/addPhoto">
-                                                    <img src="static/img/plus.png" id="plus"
-                                                         style="width:200px;height:200px;"/>
+                                                    <img src="static/img/imgIcon.png"
+                                                         style="width:50px;height:50px;position:center;" id="plus"/>
                                                 </a>
                                             {% endif %}
                                         </div>
@@ -95,11 +93,10 @@
                     <div class="col-md-9 admin-content" id="aboutMe">
                         <div class="panel panel-info" style="margin: 1em;">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Admin</h3>
-
+                                <h3 class="panel-title">Some words about me ...</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="label label-success">yes</div>
+
                             </div>
                         </div>
                     </div>
@@ -110,55 +107,107 @@
                                 <h3 class="panel-title">My pets</h3>
                             </div>
                             <div class="panel-body">
-                                {% if pets == Nil %}
-                                    <p> You haven't added any pet</p>
-                                {% else %}
-                                    {% for pet in pets %}
-                                        <div class="col-xs-12 col-sm-8">
-                                            <ul class="list-group">
-                                                <li class="list-group-item">Name: {{ pet.name }}</li>
-                                                <li class="list-group-item">Weight: {{ pet.weight }}</li>
-                                                <li class="list-group-item">Height: {{ pet.height }}</li>
-                                                <li class="list-group-item">Type: {{ pet.type }}</li>
-                                                <li class="list-group-item">Breed: {{ pet.breed }}</li>
-                                                <li class="list-group-item">Age: {{ pet.age }}</li>
-                                                {#zdjatko trzeba dodać jeszcze jakos ładnie xd#}
-                                            </ul>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                                <form class="form-login" method="post" action="/addPet">
-                                    {% csrf_token %}
-                                    {{ form.as_p }}
+                                <div class="row">
+                                    {% if pets == Nil %}
+                                        <p> You haven't added any pet</p>
+                                    {% else %}
+                                        {% for pet in pets %}
+                                            <div class="col-xs-12 col-sm-8">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Name: {{ pet.name }}</li>
+                                                    <li class="list-group-item">Weight: {{ pet.weight }}</li>
+                                                    <li class="list-group-item">Height: {{ pet.height }}</li>
+                                                    <li class="list-group-item">Type: {{ pet.type }}</li>
+                                                    <li class="list-group-item">Breed: {{ pet.breed }}</li>
+                                                    <li class="list-group-item">Age: {{ pet.age }}</li>
+                                                    {#zdjatko trzeba dodać jeszcze jakos ładnie xd#}
+                                                </ul>
+                                            </div>
+                                            <div class="profile-header-container">
+                                                <div class="profile-header-img" style="position: relative">
+                                                    <div>
+                                                        <img class="img-circle" {% if logout %}
+                                                             id="petsAvatar" {% endif %}
+                                                             src={{ pet.photo.url }} style="width:200px;height:200px;display:block"/>
+                                                    </div>
+                                                    <div class="rank-label-container">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
 
-                                    <button class="btn btn-outline-primary" type="submit">
-                                        Add new pet
-                                    </button>
-                                </form>
+                                <div class="row2">
+                                    <form class="form-login" method="post" action="/addPet">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+
+                                        <button class="btn btn-outline-primary" type="submit">
+                                            Add new pet
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-9 admin-content" id="calendar">
+                        <div class="panel panel-info" style="margin: 1em;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">My calendar</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="container">
+                                    <div class='col-md-3'>
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker6'>
+                                                <input type='text' class="form-control"/>
+                                                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='col-md-3'>
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker7'>
+                                                <input type='text' class="form-control"/>
+                                                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block javascript %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var navItems = $('.admin-menu li > a');
-            var navListItems = $('.admin-menu li');
-            var allWells = $('.admin-content');
-            var allWellsExceptFirst = $('.admin-content:not(:first)');
-            allWellsExceptFirst.hide();
-            navItems.click(function (e) {
-                e.preventDefault();
-                navListItems.removeClass('active');
-                $(this).closest('li').addClass('active');
-                allWells.hide();
-                var target = $(this).attr('data-target-id');
-                $('#' + target).show();
-            });
-        });
-    </script>
+    {#    <script type="text/javascript">#}
+    {#        $(document).ready(function () {#}
+    {#            var navItems = $('.admin-menu li > a');#}
+    {#            var navListItems = $('.admin-menu li');#}
+    {#            var allWells = $('.admin-content');#}
+    {#            var allWellsExceptFirst = $('.admin-content:not(:first)');#}
+    {#            allWellsExceptFirst.hide();#}
+    {#            navItems.click(function (e) {#}
+    {#                e.preventDefault();#}
+    {#                navListItems.removeClass('active');#}
+    {#                $(this).closest('li').addClass('active');#}
+    {#                allWells.hide();#}
+    {#                var target = $(this).attr('data-target-id');#}
+    {#                $('#' + target).show();#}
+    {#            });#}
+    {#        });#}
+    {##}
+    {##}
+    {#    </script>#}
 {% endblock javascript %}
