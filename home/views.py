@@ -26,6 +26,8 @@ def register(request):
 def registration(request):
     if request.method == "POST" and not request.user.is_authenticated:
         form = RegisterForm(request.POST)
+        storage = messages.get_messages(request)
+        storage.used = True
         if form.is_valid():
             first_name = form.cleaned_data.get('firstName')
             last_name = form.cleaned_data.get('lastName')
@@ -78,10 +80,10 @@ def login(request):
                 messages.info(request, "Login success")
                 return redirect("/")
             else:
-                messages.info(request, "Cannot authenticate user")
+                messages.warning(request, "Cannot authenticate user")
                 return render(request, "home/login.html", {'form': form})
         else:
-            messages.info(request, "Form is not valid")
+            messages.warning(request, "Form is not valid")
             return render(request, "home/login.html", {'form': form})
     else:
         return redirect("/")
