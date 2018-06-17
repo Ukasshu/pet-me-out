@@ -120,12 +120,12 @@
                                                     <li class="list-group-item">Type: {{ pet.type }}</li>
                                                     <li class="list-group-item">Breed: {{ pet.breed }}</li>
                                                     <li class="list-group-item">Age: {{ pet.age }}</li>
-                                                    {#zdjatko trzeba dodać jeszcze jakos ładnie xd#}
+
                                                 </ul>
                                             </div>
                                             <div class="profile-header-container">
                                                 <div class="profile-header-img" style="position: relative">
-                                                    <div>
+                                                    <div class="row">
                                                         <img class="img-circle" {% if logout %}
                                                              id="petsAvatar" {% endif %}
                                                              src={{ pet.photo.url }} style="width:200px;height:200px;display:block"/>
