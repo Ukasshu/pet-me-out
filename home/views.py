@@ -166,8 +166,8 @@ def create_pet(request):
             if _type == "OTHER" and form.cleaned_data.get('other') is not None:
                 other = form.cleaned_data.get('other')
             breed = None
-            if form.cleaned_data.get('type') is not None:
-                breed = form.cleaned_data.get('type')
+            if form.cleaned_data.get('breed') is not None:
+                breed = form.cleaned_data.get('breed')
             age = form.cleaned_data.get('age')
 
             user = request.user
