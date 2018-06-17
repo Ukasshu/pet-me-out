@@ -3,6 +3,10 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load static %}
+
+
+
 
 {% block content %}
     <div class="row">
@@ -84,6 +88,42 @@
                             <div class="panel-body">
                                 {{ user_data.contact }}
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 admin-content" id="aboutMe">
+                    {% csrf_token %}
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Name</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
+                    </div>
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Email</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ user.email }}
+                        </div>
+                    </div>
+
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">City</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ user_data.city }}
+                        </div>
+                    </div>
+                    <div class="panel panel-info" style="margin: 1em;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Phone number</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ user_data.contact }}
                         </div>
                     </div>
                 </div>
