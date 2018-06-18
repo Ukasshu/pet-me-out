@@ -9,7 +9,7 @@ from django.contrib.auth import login as auth_login
 
 import datetime
 
-from .models import User, UserData, Pet, StayPossibility, StayRequest
+from .models import User, UserData, Pet, StayPossibility, StayRequest, Stay
 
 
 # Create your views here.
@@ -392,6 +392,40 @@ def stay_pos(request):
 
 
 def propose_stay(request):
-    if request.user.is_authenticated and request.method=="POST":
-        raise Exception
-    return "XD"
+    if request.user.is_authenticated and request.method == "POST":
+        # request's parts
+        st_rq = StayRequest.objects.filter(id=request.POST.get("req")).first()
+        pet = st_rq.petId
+        owner = st_rq.userId
+        startDate = st_rq.startDate
+        endDate = st_rq.endDate
+
+        # possibility's part
+        caretaker = request.user
+        st_ps = None
+        if request.POST.get("pos") != "":
+            st_ps = StayPossibility.objects.filter(id=request.POST.get("pos")).first()
+            caretaker = st_ps.userId
+
+        # side's part
+        p_agree = False
+        r_agree = False
+        if request.POST.get('side') == "pos":
+            p_agree = True
+        else:
+            r_agree = True
+
+        Stay.objects.create(
+            owner=owner,
+            caretaker=caretaker,
+            pet=pet,
+            possibility=st_ps,
+            request = st_rq,
+            posAgree=p_agree,
+            reqAgree=r_agree,
+            startDate=startDate,
+            endDate=endDate
+        )
+        messages.info(request, "Pending stay created")
+
+    return HttpResponse("XD")

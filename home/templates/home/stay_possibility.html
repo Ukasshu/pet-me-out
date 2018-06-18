@@ -38,7 +38,7 @@
                                 </li>
                                 <form method="post" action="proposeStay">
                                     {% csrf_token %}
-                                        <input type="hidden" name="pos" value={{ st_ps.id }}>
+                                        <input type="hidden" name="pos">
                                         <input type="hidden" name="req" value={{ r.id }}>
                                         <input type="hidden" name="side" value="req">
                                         <button class="btn btn-lg btn-primary btn-block" type="submit">
