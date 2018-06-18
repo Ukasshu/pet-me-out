@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
+
+
+    <div class="back-panel " style="background-color: #FFFFCC;">
+
+
+
+    <div class="panel panel-default" id="panel-profile">
+  <div class="panel-heading" >
+    <h3 class="panel-title">
+        <a href="profile">{{ user.first_name }} {{ user.last_name }}</a>
+       </h3>
+  </div>
+  <div class="panel-body">
+
+      <img class="img-circle"
+      src={{ user_data.photo.url }} style="width:80px;height:80px;margin:0px"/>
+
+
+  </div>
+</div>
+
+        <div class="panel panel-default" id="panel-search">
+  <div class="panel-heading">
+    <h3 class="panel-title">Look for pet hosts</h3>
+  </div>
+  <div class="panel-body">
+                    {put search callendar here}
+
+  </div>
+</div>
+
+
+<div class="panel panel-default" id="panel-stay">
+  <!-- Default panel contents -->
+  <div class="panel-heading">My calendar</div>
+{% comment %}  <div class="panel-body">
+    <p>..</p>
+  </div>{% endcomment %}
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Stay one</li>
+    <li class="list-group-item">Stay two</li>
+  </ul>
+</div>
+    </div>
+
+{% comment %}     <section id="bck-two">
+              <img src="static/img/bck-img/one.png" alt="">
+    </section>{% endcomment %}
+
+{% endblock %}
+

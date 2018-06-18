@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/foot-fix.css' %}"/>
+    <div id="bck-container">
     <section id="bck-img">
               <div id="backgrounds">
               <img src="static/img/bck-img/one.png" alt="">
@@ -17,8 +19,12 @@
         <div>Get experience with hosting a pet.</div>
             <div>Leave your pupil with someone who really wants it.</div></h2>
                 </div>
-
     </section>
+    </div>
+
+{% comment %}     <section id="bck-two">
+              <img src="static/img/bck-img/one.png" alt="">
+    </section>{% endcomment %}
 
 {% endblock %}
 

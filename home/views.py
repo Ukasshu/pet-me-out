@@ -12,7 +12,40 @@ from .models import User, UserData, Pet
 
 # Create your views here.
 def home(request):
-    return HttpResponse(render(request, 'home/welcomePage.html'))
+    if not request.user.is_authenticated:
+        return HttpResponse(render(request, 'home/welcomePage.html'))
+    else:
+        if request.method == "GET":
+            _id = request.GET.get('id')
+            if _id is not None:
+                try:
+                    _id = int(_id)
+                    user = User.objects.filter(id=_id).first()
+                    user_data = UserData.objects.filter(userId=user).first()
+                    pets = Pet.objects.filter(ownerId=user)
+                    if user is not None and user_data is not None:
+                        return render(request, 'home/welcomePageLoggedIn.html',
+                                      {'user': user, 'user_data': user_data, 'pets': pets,
+                                       'logout': False})
+                    else:
+                        return redirect("/welcomePageLoggedIn")
+                except ValueError:
+                    return redirect("/welcomePageLoggedIn")
+            else:
+                if request.user.is_authenticated:
+                    user = request.user
+                    user_data = UserData.objects.filter(userId=user).first()
+                    pets = Pet.objects.filter(ownerId=user)
+                    if user is not None and user_data is not None:
+                        return render(request, 'home/welcomePageLoggedIn.html',
+                                      {'user': user, 'user_data': user_data, 'pets': pets, 'logout': True})
+                    else:
+                        return redirect("/")
+                else:
+                    return redirect("/")
+        else:
+            return redirect('/')
+        return HttpResponse(render(request,'home/welcomePageLoggedIn.html'))
 
 
 def register(request):
@@ -202,3 +235,7 @@ def create_pet(request):
 
 def not_found(request):
     return render(request, 'home/not_found.html')
+
+
+def test(request):
+    return render(request, 'home/test.html')
