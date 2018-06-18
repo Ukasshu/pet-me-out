@@ -7,6 +7,8 @@
 {% load static %}
 
 {% block content %}
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
     <div class="row">
         <div class="col-xs-auto">
             <div class="panel panel-default " id="panel-bckgrd" style="
@@ -25,7 +27,7 @@
                                 <div class="row">
                                     <div class="profile-header-container">
                                         <div class="profile-header-img" style="position: relative">
-                                            <div class>
+                                            <div class="profile-header">
                                                 <img class="img-circle" {% if logout %} id="avatar" {% endif %}
                                                      src={{ user_data.photo.url }} style="width:200px;height:200px;display:block;"/>
                                                 {% if logout %}
@@ -35,6 +37,13 @@
                                                              id="plus"/>
                                                     </a>
                                                 {% endif %}
+                                            </div>
+
+                                            <div class="profile-header" style="margin-left: 35px;position: static">
+                                                <div> .</div>
+                                                <div>{{ user.first_name }}</div><div>{{ user.last_name }}</div>
+                                                <div> .</div><div> .</div>
+
                                             </div>
                                             <div class="rank-label-container">
                                             </div>
@@ -61,14 +70,8 @@
 
                         <div class="col-md-9 admin-content" id="profile">
                             {% csrf_token %}
-                            <div class="panel panel-default" style="margin: 1em;">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Name</h3>
-                                </div>
-                                <div class="panel-body">
-                                    {{ user.first_name }} {{ user.last_name }}
-                                </div>
-                            </div>
+
+
                             <div class="panel panel-default" style="margin: 1em;">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Email</h3>
@@ -182,50 +185,75 @@
                         <div class="col-md-9 admin-content" id="pets">
                             <div class="panel panel-default" style="margin: 1em;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">My pets</h3>
+                                    <h3 class="panel-title" style="font-family: Lato;font-size:x-large">Meet my
+                                        pets:</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="row">
-                                        {% if pets == Nil %}
-                                            <p> You haven't added any pet</p>
-                                        {% else %}
-                                            {% for pet in pets %}
-                                                <div class="col-xs-12 col-sm-8">
-                                                    <ul class="list-group">
-                                                        <li class="list-group-item">Name: {{ pet.name }} </li>
-                                                        <li class="list-group-item">Weight: {{ pet.weight }}</li>
-                                                        <li class="list-group-item">Height: {{ pet.height }}</li>
-                                                        <li class="list-group-item">Type: {{ pet.type }}</li>
-                                                        <li class="list-group-item">Breed: {{ pet.breed }}</li>
-                                                        <li class="list-group-item">Age: {{ pet.age }}</li>
+                                    {% comment %}<div class="row" id="row-pet">{% endcomment %}
+                                    {% if pets == Nil %}
+                                        <p> You haven't added any pet</p>
+                                    {% else %}
+                                        {% for pet in pets %}
 
-                                                    </ul>
-                                                </div>
-                                                <div class="profile-header-container">
+                                            <div class="panel-body">
+
+
+                                                <div class="col-xs-12 col-sm-6">
+
+                                                    <div class="profile-header-title">
+                                                        <div style="font-family: Lato;font-size: x-large">
+                                                            {{ pet.name }} </div>
+
+                                                    </div>
                                                     <div class="profile-header-img" style="position: relative">
                                                         <div class="row">
+
                                                             <img class="img-circle" {% if logout %}
                                                                  id="petsAvatar" {% endif %}
                                                                  src={{ pet.photo.url }} style="width:200px;height:200px;display:block"/>
                                                         </div>
                                                         <div class="rank-label-container">
                                                         </div>
+
                                                     </div>
+                                                    <div class="profile-header-button">
+
+                                                        {% if logout %}
+                                                            <form class="form-login" method="get"
+                                                                  action="/removePet">
+                                                                <input type="hidden" name="petId"
+                                                                       value={{ pet.id }}>
+                                                                <button class="btn btn-outline-primary "
+                                                                        type="submit">
+                                                                    Delete pet
+                                                                </button>
+                                                            </form>
+                                                        {% endif %}
+
+                                                    </div>
+
+
                                                 </div>
 
-                                                {% if logout %}
-                                                    <form class="form-login" method="get"
-                                                          action="/removePet">
-                                                        <input type="hidden" name="petId" value={{ pet.id }}>
-                                                        <button class="btn btn-outline-primary " type="submit">
-                                                            Delete pet
-                                                        </button>
-                                                    </form>
-                                                {% endif %}
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <ul class="list-group" style="padding-top: 50px">
+                                                        <li class="list-group-item">
+                                                            Weight: {{ pet.weight }}</li>
+                                                        <li class="list-group-item">
+                                                            Height: {{ pet.height }}</li>
+                                                        <li class="list-group-item">Type: {{ pet.type }}</li>
+                                                        <li class="list-group-item">Breed: {{ pet.breed }}</li>
+                                                        <li class="list-group-item">Age: {{ pet.age }}</li>
 
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
+                                                    </ul>
+                                                </div>
+
+
+                                            </div>
+
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% comment %} </div>{% endcomment %}
                                     {% if logout %}
                                         <div class="row2">
                                             <form class="form-login" method="post" action="/addPet">
