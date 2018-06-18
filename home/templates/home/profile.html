@@ -129,6 +129,17 @@
                                         {% endif %}
                                     </div>
                                     <div class="row">
+                                        {% if logout %}
+                                            <form class="form-login" method="post" action="/addGuestAdvert">
+                                                {% csrf_token %}
+                                                {{ form.as_p }}
+                                                <button class="btn btn-outline-primary center-block" type="submit">
+                                                    Add guest advert
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <div class="row">
                                         {% if  not stay_possibilities %}
                                             <p class="text-center">You haven't added any adverts for hosting.</p>
                                         {% else %}
@@ -143,23 +154,28 @@
                                                         </li>
                                                         <li class="list-group-item"><i
                                                                 class="glyphicon glyphicon-home"></i> Host
-                                                            city: {{ user_data.city }}</li>
+                                                            city: {{ user_data.city }}
+                                                        <li class="list-group-item">🐾 Hosted type of
+                                                            pet: {{ advert.petType }}</li>
                                                     </ul>
 
                                                 {% endfor %}
                                             </div>
                                         {% endif %}
                                     </div>
+
+                                    <div class="row">
+                                        {% if logout %}
+                                            <form class="form-login" method="post" action="/addHostAdvert">
+                                                {% csrf_token %}
+                                                {{ form.as_p }}
+                                                <button class="btn btn-outline-primary center-block" type="submit">
+                                                    Add host advert
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                                {#                                    <div class="row2">#}
-                                {#                                        <form class="form-login" method="post" action="/addAdvert">#}
-                                {#                                            {% csrf_token %}#}
-                                {#                                            {{ form.as_p }}#}
-                                {#                                            <button class="btn btn-outline-primary" type="submit">#}
-                                {#                                                Add new advert#}
-                                {#                                            </button>#}
-                                {#                                        </form>#}
-                                {#                                    </div>#}
                             </div>
                         </div>
 
@@ -176,7 +192,7 @@
                                             {% for pet in pets %}
                                                 <div class="col-xs-12 col-sm-8">
                                                     <ul class="list-group">
-                                                        <li class="list-group-item">Name: {{ pet.name }}</li>
+                                                        <li class="list-group-item">Name: {{ pet.name }} </li>
                                                         <li class="list-group-item">Weight: {{ pet.weight }}</li>
                                                         <li class="list-group-item">Height: {{ pet.height }}</li>
                                                         <li class="list-group-item">Type: {{ pet.type }}</li>
@@ -196,6 +212,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                {% if logout %}
+                                                    <form class="form-login" method="get"
+                                                          action="/removePet">
+                                                        <input type="hidden" name="petId" value={{ pet.id }}>
+                                                        <button class="btn btn-outline-primary " type="submit">
+                                                            Delete pet
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+
                                             {% endfor %}
                                         {% endif %}
                                     </div>
@@ -222,7 +249,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         {% if not logout %}
-                                            {#                                             <form class="form-login" method="post" action="/addComment">#}
+                                            {#                                            <form class="form-login" method="post" action="/addComment">#}
                                             {#                                                {% csrf_token %}#}
                                             {#                                                {{ form.as_p }}#}
                                             {##}

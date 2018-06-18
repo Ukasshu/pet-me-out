@@ -187,6 +187,7 @@ def upload_photo(request):
             user_data.photo = form.cleaned_data.get('image')
             user_data.save()
 
+
             return redirect('/profile')
         else:
             return redirect("/addPhoto", {'form': form})
