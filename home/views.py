@@ -45,7 +45,7 @@ def home(request):
                     return redirect("/")
         else:
             return redirect('/')
-        return HttpResponse(render(request,'home/welcomePageLoggedIn.html'))
+        return HttpResponse(render(request, 'home/welcomePageLoggedIn.html'))
 
 
 def register(request):
@@ -186,8 +186,11 @@ def upload_photo(request):
 
 
 def add_pet(request):
-    form = AddPetForm()
-    return render(request, 'home/add_pet.html', {'form': form})
+    if request.user.is_authenticated:
+        form = AddPetForm()
+        return render(request, 'home/add_pet.html', {'form': form})
+    else:
+        return redirect("/")
 
 
 def create_pet(request):
@@ -234,8 +237,23 @@ def create_pet(request):
 
 
 def not_found(request):
-    return render(request, 'home/not_found.html')
+    if request.user.is_authenticated:
+        return render(request, 'home/not_found.html')
+    else:
+        return redirect("/")
 
+
+def add_advert(request):
+    if request.user.is_authenticated:
+        pets = Pet.objects.filter(ownerId=request.user)
+        pets_choices = tuple(map(lambda p: (p, p.name),pets))
+        form = AddAdvertForm(pets_choices)
+        return render(request, 'home/add_advert.html', {'form': form})
+    else:
+        return redirect("/")
+
+def create_advert(request):
+    return "<h1>xD</h2>"
 
 def test(request):
     return render(request, 'home/test.html')

@@ -15,7 +15,6 @@ class MyDateInput(forms.DateInput):  # inner class for input type date - otherwi
 
 
 class RegisterForm(forms.Form):
-
     numeric = RegexValidator(r'^\+?1?\d{9,15}$',
                              "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     firstName = forms.CharField(label="", max_length=30,
@@ -54,19 +53,23 @@ class AddPetForm(forms.Form):
                               widget=forms.NumberInput(attrs={'placeholder': 'Weight', 'class': 'form-control'}))
     height = forms.FloatField(label="", min_value=0, required=False,
                               widget=forms.NumberInput(attrs={'placeholder': 'Height', 'class': 'form-control'}))
-    type = forms.ChoiceField(label="", choices=PET_TYPE_CHOICES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
-    other = forms.CharField(label="", required=False, widget=forms.TextInput(attrs={'placeholder': 'Other', 'style': "visibility=hidden;",'class': 'form-control'}))
-    breed = forms.CharField(label="", required=False, widget=forms.TextInput(attrs={'placeholder': 'Breed', 'class': 'form-control'}))
+    type = forms.ChoiceField(label="", choices=PET_TYPE_CHOICES, required=True,
+                             widget=forms.Select(attrs={'class': 'form-control'}))
+    other = forms.CharField(label="", required=False, widget=forms.TextInput(
+        attrs={'placeholder': 'Other', 'style': "visibility=hidden;", 'class': 'form-control'}))
+    breed = forms.CharField(label="", required=False,
+                            widget=forms.TextInput(attrs={'placeholder': 'Breed', 'class': 'form-control'}))
     age = forms.IntegerField(label="", min_value=0, required=True,
                              widget=forms.NumberInput(attrs={'placeholder': 'Age (years)', 'class': 'form-control'}))
     img = forms.ImageField(label="", required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
 
-class AddAdertForm(forms.Form):
+class AddAdvertForm(forms.Form):
     def __init__(self, choices):
-        pets = forms.MultipleChoiceField(choices=choices)
+        super(AddAdvertForm, self).__init__()
+        self.fields['pets'] = forms.TypedMultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple())
 
-    dateFrom = forms.DateField(widget=MyDateInput(attrs={'class': 'form-control'}))
-    dateTo = forms.DateField(widget=MyDateInput(attrs={'class': 'form-control'}))
-    pets = None
-    advertType = forms.ChoiceField(choices=(('Host', "Host"), ("Guest", "Guest")))
+    dateFrom = forms.DateField(label="From:", widget=MyDateInput(attrs={'class': 'form-control'}))
+    dateTo = forms.DateField(label="To:", widget=MyDateInput(attrs={'class': 'form-control'}))
+    advertType = forms.ChoiceField(label="Role:", choices=(('Host', "Host"), ("Guest", "Guest")),
+                                   widget=forms.Select(attrs={'class': 'form-control'}))

@@ -14,5 +14,7 @@ urlpatterns = [
     path('addPet', views.add_pet, name='add_pet'),
     path('createPet', views.create_pet, name='create_pet'),
     path("404", views.not_found, name='not_found'),
-    path("test", views.test, name='test')
+    path("test", views.test, name='test'),
+    path("addAdvert", views.add_advert, name='add_advert'),
+    path("createAdvert", views.create_advert, name='create_advert')
 ]
