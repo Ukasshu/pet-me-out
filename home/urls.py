@@ -16,5 +16,7 @@ urlpatterns = [
     path("404", views.not_found, name='not_found'),
     path("test", views.test, name='test'),
     path("addGuestAdvert", views.add_guest_advert, name='add_guest_advert'),
-    path("createGuestAdvert", views.create_guest_advert, name='create_guest_advert')
+    path("createGuestAdvert", views.create_guest_advert, name='create_guest_advert'),
+    path("addHostAdvert", views.add_host_advert, name='add_host_advert'),
+    path("createHostAdvert", views.create_host_advert, name='create_host_advert')
 ]

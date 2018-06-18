@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 
+import datetime
+
 from .models import User, UserData, Pet, StayPossibility, StayRequest
 
 
@@ -259,6 +261,14 @@ def add_guest_advert(request):
         return redirect("/")
 
 
+def add_host_advert(request):
+    if request.user.is_authenticated:
+        form = AddHostAdvertForm()
+        return render(request, 'home/add_host_advert.html', {'form': form})
+    else:
+        return redirect("/")
+
+
 def create_guest_advert(request):
     if request.user.is_authenticated and request.method == "POST":
         pets_choices = tuple(map(lambda p: (p.id, p.name), Pet.objects.filter(ownerId=request.user)))
@@ -269,9 +279,11 @@ def create_guest_advert(request):
             if dateFrom > dateTo:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
+            elif dateFrom < datetime.datetime.today().date() :
+                messages.warning(request, "🚀 Time travels unavailable yet 🚀")
+                return render(request, 'home/add_guest_advert.html', {'form': form})
             else:
                 user = request.user
-                print(type(form.cleaned_data.get('pets')))
                 for petId in form.cleaned_data.get('pets'):
                     pet = Pet.objects.filter(id=petId).first()
                     StayRequest.objects.create(
@@ -284,6 +296,34 @@ def create_guest_advert(request):
                 return redirect('/profile')
         else:
             return render(request, 'home/add_guest_advert.html', {'form': form})
+    else:
+        return redirect("/")
+
+
+def create_host_advert(request):
+    if request.user.is_authenticated and request.method == "POST":
+        form = AddHostAdvertForm(request.POST)
+        if form.is_valid():
+            date_from = form.cleaned_data.get('dateFrom')
+            date_to = form.cleaned_data.get('dateTo')
+            if date_from > date_to:
+                messages.warning(request, "Wrong time period ('from' after 'to')")
+                return render(request, 'home/add_host_advert.html', {'form': form})
+            elif date_from < datetime.datetime.today().date() :
+                messages.warning(request, "🚀 Time travels unavailable yet 🚀")
+                return render(request, 'home/add_guest_advert.html', {'form': form})
+            else:
+                pet_type = form.cleaned_data.get('type')
+                StayPossibility.objects.create(
+                    startDate=date_from,
+                    endDate=date_to,
+                    userId=request.user,
+                    petType=pet_type
+                )
+                messages.info(request, "Advert successfully added")
+                return redirect('/profile')
+        else:
+            return render(request, "/home/add_host_advert.html", {'form': form})
     else:
         return redirect("/")
 

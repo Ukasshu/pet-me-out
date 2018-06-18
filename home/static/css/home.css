@@ -1,11 +1,14 @@
 html, body {
     height: 100%;
+/*    max-width: 100%;*/
+
 }
 
 body {
 
     position: relative;
-    max-width: 100vw;
+/*    max-width: 100vw;*/
+    overflow-x: hidden;
 
 }
 #content:first-child{
@@ -29,8 +32,22 @@ body {
     display:none;
 }
 
+.navbar-brand{
+    padding-top: -10px;
+/*        display:inline;
+    flex-direction:row;
+justify-content: space-around;
+    margin: 0 auto;
+    padding: 0px;*/
+}
+
+#div-inline{
+
+    display: inline-block;
+}
 #backgrounds{
-    padding-bottom: 40px;
+    padding-bottom: 35px;
+    position: sticky;
 }
 
 #bck-two img{
@@ -175,4 +192,10 @@ body {
    height:35px;
 
     z-index: 3;
+}
+
+.form-group:active{
+  /*  transition: 0.5s;
+*/
+    border-color: yellowgreen;
 }

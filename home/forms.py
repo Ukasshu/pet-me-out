@@ -2,11 +2,20 @@ from django import forms
 from django.core.validators import RegexValidator
 
 PET_TYPE_CHOICES = (
-    ("DOG", "Dog"),
-    ("CAT", "Cat"),
-    ("HAMSTER", "Hamster"),
-    ("BIRD", "Bird"),
-    ("OTHER", "Other")
+    ("Dog", "Dog"),
+    ("Cat", "Cat"),
+    ("Hamster", "Hamster"),
+    ("Bird", "Bird"),
+    ("Other", "Other")
+)
+
+TYPE_CHOICES = (
+    ("Dog", "Dog"),
+    ("Cat", "Cat"),
+    ("Hamster", "Hamster"),
+    ("Bird", "Bird"),
+    ("Other", "Other"),
+    ("All", "All")
 )
 
 
@@ -71,3 +80,10 @@ class AddGuestAdvertForm(forms.Form):
 
     dateFrom = forms.DateField(label="From:", widget=MyDateInput(attrs={'class': 'form-control'}))
     dateTo = forms.DateField(label="To:", widget=MyDateInput(attrs={'class': 'form-control'}))
+
+
+class AddHostAdvertForm(forms.Form):
+    dateFrom = forms.DateField(label="From:", widget=MyDateInput(attrs={'class': 'form-control'}))
+    dateTo = forms.DateField(label="To:", widget=MyDateInput(attrs={'class': 'form-control'}))
+    type = forms.ChoiceField(label="Pet type:", choices=TYPE_CHOICES,
+                             widget=forms.Select(attrs={'class': 'form-control'}))
