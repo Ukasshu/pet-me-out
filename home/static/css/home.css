@@ -5,6 +5,7 @@ html, body {
 body {
 
     position: relative;
+    max-width: 100vw;
 
 }
 #content:first-child{
