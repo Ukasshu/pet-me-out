@@ -356,13 +356,15 @@ def stay_req(request):
         if st_rq is None:
             return redirect("/404")
         else:
+            cityArg = UserData.objects.filter(userId=st_rq.userId).first().city
             recom = None
             if st_rq.userId == request.user:
                 city = UserData.objects.filter(userId=request.user).first().city
                 recom = StayPossibility.objects.filter(userId__userdata__city=city)\
                     .filter(startDate__lte=st_rq.startDate)\
-                    .filter(endDate__gte=st_rq.endDate)[:5]
-            return render(request, "home/stay_request.html", {"recom": recom, "st_rq": st_rq})
+                    .filter(endDate__gte=st_rq.endDate)\
+                    .exclude(userId=request.user)[:5]
+            return render(request, "home/stay_request.html", {"recom": recom, "st_rq": st_rq, 'city': cityArg})
     else:
         return redirect("/")
 
@@ -373,16 +375,23 @@ def stay_pos(request):
         if st_ps is None:
             return redirect("/404")
         else:
+            cityArg = UserData.objects.filter(userId=st_ps.userId).first().city
             recom = None
             if st_ps.userId == request.user:
                 city = UserData.objects.filter(userId=request.user).first().city
                 recom = StayRequest.objects.filter(userId__userdata__city=city) \
                             .filter(startDate__gte=st_ps.startDate) \
-                            .filter(endDate__lte=st_ps.endDate)[:5]
-            return render(request, "home/stay_possibility.html", {"recom": recom, "st_ps": st_ps})
+                            .filter(endDate__lte=st_ps.endDate)\
+                            .exclude(userId=request.user)
+                if st_ps.petType != 'All':
+                    recom = recom.filter(petId__type=st_ps.petType)
+                recom = recom[:5]
+            return render(request, "home/stay_possibility.html", {"recom": recom, "st_ps": st_ps, 'city': cityArg})
     else:
         return redirect("/")
 
 
-def test(request):
-    return render(request, 'home/test.html')
+def propose_stay(request):
+    if request.user.is_authenticated and request.method=="POST":
+        raise Exception
+    return "XD"
