@@ -279,7 +279,7 @@ def create_guest_advert(request):
             if dateFrom > dateTo:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
-            elif dateFrom < datetime.datetime.today().date() :
+            elif dateFrom < datetime.datetime.today().date():
                 messages.warning(request, "🚀 Time travels unavailable yet 🚀")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
             else:
@@ -309,7 +309,7 @@ def create_host_advert(request):
             if date_from > date_to:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
                 return render(request, 'home/add_host_advert.html', {'form': form})
-            elif date_from < datetime.datetime.today().date() :
+            elif date_from < datetime.datetime.today().date():
                 messages.warning(request, "🚀 Time travels unavailable yet 🚀")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
             else:
@@ -341,10 +341,27 @@ def remove_pet(request):
 
 
 def delete_pet(request):
-    if request.user.is_authenticated and request.method=="POST" and request.POST.get('id') is not None:
+    if request.user.is_authenticated and request.method == "POST" and request.POST.get('id') is not None:
         Pet.objects.filter(id=request.POST.get('id')).delete()
         messages.info(request, "Your pet has been deleted")
         return redirect("/profile")
+    else:
+        return redirect("/")
+
+
+def stay_req(request):
+    if request.user.is_authenticated and request.method == "GET" and request.GET.get('id') is not None:
+        st_rq = StayRequest.objects.filter(id=request.POST.get('id')).first()
+        if st_rq is None:
+            return redirect("/404")
+        else:
+            recom = None
+            if st_rq.userId == request.user:
+                city = UserData.objects.filter(userId=request.user).first().city
+                recom = StayPossibility.objects.filter(userId__userdata__city=city)\
+                    .filter(startDate__lte=st_rq.startDate)\
+                    .filter(endDate__gte=st_rq.endDate)[:5]
+            return render(request, "home/stay_request.html", {"recom":recom, "st_rq": st_rq})
     else:
         return redirect("/")
 
