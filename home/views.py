@@ -393,5 +393,5 @@ def stay_pos(request):
 
 def propose_stay(request):
     if request.user.is_authenticated and request.method=="POST":
-        return "XD"
+        raise Exception
     return "XD"
