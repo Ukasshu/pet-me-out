@@ -271,8 +271,17 @@ def create_guest_advert(request):
                 return render(request, 'home/add_guest_advert.html', {'form': form})
             else:
                 user = request.user
-
-                return render(request, 'home/add_guest_advert.html', {'form': form})
+                print(type(form.cleaned_data.get('pets')))
+                for petId in form.cleaned_data.get('pets'):
+                    pet = Pet.objects.filter(id=petId).first()
+                    StayRequest.objects.create(
+                        startDate=dateFrom,
+                        endDate=dateTo,
+                        userId=user,
+                        petId=pet
+                    )
+                messages.info(request, "Advert successfully added")
+                return redirect('/profile')
         else:
             return render(request, 'home/add_guest_advert.html', {'form': form})
     else:
