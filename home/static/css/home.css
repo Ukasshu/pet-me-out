@@ -32,15 +32,6 @@ body {
     display:none;
 }
 
-.navbar-brand{
-    padding-top: -10px;
-/*        display:inline;
-    flex-direction:row;
-justify-content: space-around;
-    margin: 0 auto;
-    padding: 0px;*/
-}
-
 #div-inline{
 
     display: inline-block;
@@ -101,7 +92,7 @@ justify-content: space-around;
     font-weight: lighter;
     line-height: 1.1;
     margin-top: 10px;
-    padding: 20px;
+    padding: 30px;
     size: auto;
 }
 
@@ -159,6 +150,10 @@ justify-content: space-around;
 
 }
 
+.frontpage-wrapper>div{
+    display: inline-block;
+}
+
 #panel-search, #panel-profile {
     height: auto;
     display: inline-block;
@@ -193,10 +188,4 @@ justify-content: space-around;
    height:35px;
 
     z-index: 3;
-}
-
-.form-group:active{
-  /*  transition: 0.5s;
-*/
-    border-color: yellowgreen;
 }
