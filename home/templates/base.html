@@ -1,4 +1,3 @@
-
 {% load staticfiles %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
@@ -58,13 +57,15 @@
                         {% if request.user.is_authenticated %}
                             <li><a class="navbar-brand" href="profile">
 
-                                <div id="div-inline"><img src={{ user_data.photo.url }}
-                                                  style="width:35px;height:35px;border-radius:50%;"></div>
+                                <img src={{ user_data.photo.url }}
+                                             style="width:40px;height:40px;border-radius:50%;margin-top:-10px"/>
 
-                                <div id="div-inline">{{ request.user }}</div>
+
                             </a></li>
 
-
+                            <li><a href="profile">
+                            {{ request.user }}
+                            </a></li>
                             <li><a href="logout">Logout</a></li>
                         {% else %}
                             <li><a href="login">Sign in</a></li>
@@ -75,8 +76,8 @@
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
-    </nav>
-{% endblock %}
+        </nav>
+    {% endblock %}
 
 <div id="content">
     {% if messages %}
@@ -92,17 +93,17 @@
     </div>
     {% endif %}
     {% block content %}{% endblock %}
-</div>
-
-
-        {% block footer %}
-            <footer class="footer">
-                <div class="container">
-                    <span class="text-muted">© 2018 Łukasz Mielczarek, Kinga Rzepecka, Maria Sosenkiewicz</span>
-                </div>
-            </footer>
-        {% endblock %}
     </div>
+
+
+    {% block footer %}
+        <footer class="footer">
+            <div class="container">
+                <span class="text-muted">© 2018 Łukasz Mielczarek, Kinga Rzepecka, Maria Sosenkiewicz</span>
+            </div>
+        </footer>
+    {% endblock %}
+</div>
 
 
 </body>
