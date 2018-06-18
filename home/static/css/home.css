@@ -189,3 +189,23 @@ body {
 
     z-index: 3;
 }
+
+.list-group-item>div{
+    display: inline-block;
+}
+
+
+.list-group-item{
+    color: cadetblue!important;
+}
+
+.profile-header{
+    display: inline-block;
+
+}
+
+.profile-header {
+    font-family: Lobster;
+    font-size: 35px;
+    color: cadetblue;
+}
