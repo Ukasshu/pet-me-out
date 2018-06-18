@@ -64,12 +64,10 @@ class AddPetForm(forms.Form):
     img = forms.ImageField(label="", required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
 
-class AddAdvertForm(forms.Form):
-    def __init__(self, choices):
-        super(AddAdvertForm, self).__init__()
-        self.fields['pets'] = forms.TypedMultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple())
+class AddGuestAdvertForm(forms.Form):
+    def __init__(self, choices, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['pets'] = forms.MultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple())
 
     dateFrom = forms.DateField(label="From:", widget=MyDateInput(attrs={'class': 'form-control'}))
     dateTo = forms.DateField(label="To:", widget=MyDateInput(attrs={'class': 'form-control'}))
-    advertType = forms.ChoiceField(label="Role:", choices=(('Host', "Host"), ("Guest", "Guest")),
-                                   widget=forms.Select(attrs={'class': 'form-control'}))

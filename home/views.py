@@ -243,17 +243,34 @@ def not_found(request):
         return redirect("/")
 
 
-def add_advert(request):
+def add_guest_advert(request):
     if request.user.is_authenticated:
-        pets = Pet.objects.filter(ownerId=request.user)
-        pets_choices = tuple(map(lambda p: (p, p.name),pets))
-        form = AddAdvertForm(pets_choices)
-        return render(request, 'home/add_advert.html', {'form': form})
+        pets_choices = tuple(map(lambda p: (p.id, p.name), Pet.objects.filter(ownerId=request.user)))
+        form = AddGuestAdvertForm(pets_choices, None)
+        return render(request, 'home/add_guest_advert.html', {'form': form})
     else:
         return redirect("/")
 
-def create_advert(request):
-    return "<h1>xD</h2>"
+
+def create_guest_advert(request):
+    if request.user.is_authenticated and request.method == "POST":
+        pets_choices = tuple(map(lambda p: (p.id, p.name), Pet.objects.filter(ownerId=request.user)))
+        form = AddGuestAdvertForm(pets_choices, request.POST)
+        if form.is_valid():
+            dateFrom = form.cleaned_data.get("dateFrom")
+            dateTo = form.cleaned_data.get("dateTo")
+            if dateFrom > dateTo:
+                messages.warning(request, "Wrong time period ('from' after 'to')")
+                return render(request, 'home/add_guest_advert.html', {'form': form})
+            else:
+                user = request.user
+
+                return render(request, 'home/add_guest_advert.html', {'form': form})
+        else:
+            return render(request, 'home/add_guest_advert.html', {'form': form})
+    else:
+        return redirect("/")
+
 
 def test(request):
     return render(request, 'home/test.html')
