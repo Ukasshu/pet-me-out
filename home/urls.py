@@ -22,5 +22,8 @@ urlpatterns = [
     path("deletePet", views.delete_pet, name="delete_pet"),
     path("stayRequest", views.stay_req, name="stay_req"),
     path("stayPossibility", views.stay_pos, name="stay_pos"),
-    path("proposeStay", views.propose_stay, name="propose_stay")
+    path("proposeStay", views.propose_stay, name="propose_stay"),
+    path("acceptStay", views.accept_stay, name="accept_stay"),
+    path("refuseStay", views.refuse_stay, name="refuse_stay"),
+    path("staysManagement", views.stays_management, name="stays_management")
 ]

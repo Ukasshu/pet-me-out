@@ -187,7 +187,6 @@ def upload_photo(request):
             user_data.photo = form.cleaned_data.get('image')
             user_data.save()
 
-
             return redirect('/profile')
         else:
             return redirect("/addPhoto", {'form': form})
@@ -360,10 +359,10 @@ def stay_req(request):
             recom = None
             if st_rq.userId == request.user:
                 city = UserData.objects.filter(userId=request.user).first().city
-                recom = StayPossibility.objects.filter(userId__userdata__city=city)\
-                    .filter(startDate__lte=st_rq.startDate)\
-                    .filter(endDate__gte=st_rq.endDate)\
-                    .exclude(userId=request.user)[:5]
+                recom = StayPossibility.objects.filter(userId__userdata__city=city) \
+                            .filter(startDate__lte=st_rq.startDate) \
+                            .filter(endDate__gte=st_rq.endDate) \
+                            .exclude(userId=request.user)[:5]
             return render(request, "home/stay_request.html", {"recom": recom, "st_rq": st_rq, 'city': cityArg})
     else:
         return redirect("/")
@@ -380,9 +379,9 @@ def stay_pos(request):
             if st_ps.userId == request.user:
                 city = UserData.objects.filter(userId=request.user).first().city
                 recom = StayRequest.objects.filter(userId__userdata__city=city) \
-                            .filter(startDate__gte=st_ps.startDate) \
-                            .filter(endDate__lte=st_ps.endDate)\
-                            .exclude(userId=request.user)
+                    .filter(startDate__gte=st_ps.startDate) \
+                    .filter(endDate__lte=st_ps.endDate) \
+                    .exclude(userId=request.user)
                 if st_ps.petType != 'All':
                     recom = recom.filter(petId__type=st_ps.petType)
                 recom = recom[:5]
@@ -420,12 +419,121 @@ def propose_stay(request):
             caretaker=caretaker,
             pet=pet,
             possibility=st_ps,
-            request = st_rq,
+            request=st_rq,
             posAgree=p_agree,
             reqAgree=r_agree,
             startDate=startDate,
             endDate=endDate
         )
         messages.info(request, "Pending stay created")
+        return redirect("/profile")
+    else:
+        return redirect("/")
 
-    return HttpResponse("XD")
+
+def accept_stay(request):
+    if request.user.is_authenticated and request.method == "POST":
+        if request.POST.get("id") and request.POST.get("side"):
+            st_obj = Stay.objects.filter(id=request.POST.get("id")).first()
+            if request.POST.get("side") == "pos":
+                if not st_obj.posAgree:
+                    st_obj.posAgree = True
+                    st_obj.save()
+                    Stay.objects.filter(request=st_obj.request).exclude(id=st_obj.id).delete()
+                    st_obj.request.delete()
+                    Stay.objects.filter(request=st_obj.request)
+                    if st_obj.possibility is not None:
+                        Stay.objects.filter(possibility=st_obj.possibility).exclude(id=st_obj.id).delete()
+                        st_obj.possibility.delete()
+                    messages.info(request, "Stay accepted")
+                    return redirect("/profile")
+                else:
+                    return redirect('/404')
+            elif request.POST.get("side") == "req":
+                if not st_obj.reqAgree:
+                    st_obj.reqAgree = True
+                    st_obj.save()
+                    Stay.objects.filter(request=st_obj.request).exclude(id=st_obj.id).delete()
+                    st_obj.request.delete()
+                    if st_obj.possibility is not None:
+                        Stay.objects.filter(possibility=st_obj.possibility).exclude(id=st_obj.id).delete()
+                        st_obj.possibility.delete()
+                    messages.info(request, "Stay accepted")
+                    return redirect("/profile")
+                else:
+                    return redirect('/404')
+            else:
+                return redirect('/404')
+        else:
+            return redirect('/404')
+    else:
+        return redirect("/")
+
+
+def refuse_stay(request):
+    if request.user.is_authenticated and request.method == "POST":
+        if request.POST.get("side") and request.POST.get("id"):
+            st_obj = Stay.objects.first(id=request.POST.get("id")).first()
+            if st_obj is not None:
+                if request.POST.get("side") == "pos" or request.POST.get("side") == "req":
+                    st_obj.delete()
+                    messages.info("Stay refused")
+                    return redirect("/profile")
+                else:
+                    redirect("/404")
+            else:
+                redirect("/404")
+        else:
+            return redirect("/404")
+    else:
+        return redirect("/")
+
+
+def stays_management(request):
+    if request.user.is_authenticated and request.method == "GET":
+        # pending Stays
+        pn_st_req = Stay.objects.filter(owner=request.user) \
+            .filter(posAgree=False)
+        pn_st_pos = Stay.objects.filter(caretaker=request.user) \
+            .filter(reqAgree=False)
+        pending_stays = {'req': pn_st_req, 'pos': pn_st_pos}
+
+        # Stay offers
+        st_of_req = Stay.objects.filter(owner=request.user) \
+            .filter(reqAgree=False)
+        st_of_pos = Stay.objects.filter(caretaker=request.user) \
+            .filter(posAgree=False)
+
+        stay_offers = {'req': st_of_req, 'pos': st_of_pos}
+
+        # active Stays
+        ac_st_req = Stay.objects.filter(startDate__lte=datetime.datetime.today().date()) \
+            .filter(endDate__gte=datetime.datetime.today().date()) \
+            .filter(owner=request.user) \
+            .filter(reqAgree=True).filter(posAgree=True)
+        ac_st_pos = Stay.objects.filter(startDate__lte=datetime.datetime.today().date()) \
+            .filter(endDate__gte=datetime.datetime.today().date()) \
+            .filter(caretaker=request.user) \
+            .filter(reqAgree=True).filter(posAgree=True)
+        active_stays = {'req': ac_st_req, 'pos': ac_st_pos}
+
+        # future Stays
+        ft_st_req = Stay.objects.filter(startDate__gt=datetime.datetime.today().date()) \
+            .filter(owner=request.user) \
+            .filter(reqAgree=True).filter(posAgree=True)
+        ft_st_pos = Stay.objects.filter(startDate__gt=datetime.datetime.today().date()) \
+            .filter(caretaker=request.user) \
+            .filter(reqAgree=True).filter(posAgree=True)
+        future_stays = {'req': ft_st_req, 'pos': ft_st_pos}
+
+        # past Stays
+        ps_st_req = Stay.objects.filter(endDate__lt=datetime.datetime.today().date()) \
+            .filter(owner=request.user) \
+            .filter(reqAgree=True).filter(posAgree=True)
+        ps_st_pos = Stay.objects.filter(endDate__lt=datetime.datetime.today().date()) \
+            .filter(caretaker=request.user) \
+            .filter(reqAgree=True).filter(posAgree=True)
+        past_stays = {'req': ps_st_req, 'pos': ps_st_pos}
+        return render(request, "home/stay_management.html", {"pending":pending_stays, "offers":stay_offers, "active":active_stays, "future": future_stays, "past": past_stays})
+    else:
+        return redirect("/")
