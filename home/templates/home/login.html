@@ -4,19 +4,7 @@
 {% bootstrap_javascript %}
 {% load static %}
 {% block content %}
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
 
-                <div class="alert alert-danger" role="alert" style="text-align:center;">
-            {% else %}
-                <div class="alert alert-success" role="alert" style="text-align:center;">
-            {% endif %}
-            {% if message.tags %} {% endif %}{{ message }}
-            <a href="#" class="alert-link"/>
-        {% endfor %}
-    </div>
-    {% endif %}
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/dir-pages.css' %}"/>
 <div class="container" style="position: center;">

@@ -5,15 +5,6 @@
 {% bootstrap_javascript %}
 {% block content %}
 
-    {% if messages %}
-        <div class="alert alert-danger" role="alert" style="text-align:center;">
-            {% for message in messages %}
-                {% if message.tags %} {% endif %}{{ message }}
-                <a href="#" class="alert-link"/>
-            {% endfor %}
-        </div>
-    {% endif %}
-
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
             <link rel="stylesheet" type="text/css" href="{% static 'css/dir-pages.css' %}"/>
     <div class="container" style="position: center;">
