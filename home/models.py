@@ -46,6 +46,7 @@ class StayPossibility(models.Model):
     userId = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     startDate = models.DateField(default=None)
     endDate = models.DateField(default=None)
+    petType = models.CharField(default=None, max_length=10)
 
 
 class Conversation(models.Model):
