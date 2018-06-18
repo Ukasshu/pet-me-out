@@ -18,5 +18,7 @@ urlpatterns = [
     path("addGuestAdvert", views.add_guest_advert, name='add_guest_advert'),
     path("createGuestAdvert", views.create_guest_advert, name='create_guest_advert'),
     path("addHostAdvert", views.add_host_advert, name='add_host_advert'),
-    path("createHostAdvert", views.create_host_advert, name='create_host_advert')
+    path("createHostAdvert", views.create_host_advert, name='create_host_advert'),
+    path("removePet", views.remove_pet, name="remove_pet"),
+    path("deletePet", views.delete_pet, name="delete_pet")
 ]

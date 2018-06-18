@@ -323,7 +323,28 @@ def create_host_advert(request):
                 messages.info(request, "Advert successfully added")
                 return redirect('/profile')
         else:
-            return render(request, "/home/add_host_advert.html", {'form': form})
+            return render(request, "home/add_host_advert.html", {'form': form})
+    else:
+        return redirect("/")
+
+
+def remove_pet(request):
+    if request.user.is_authenticated and request.method == "GET" and request.GET.get('petId') is not None:
+        pet_id = request.GET.get('petId')
+        pet = Pet.objects.filter(id=pet_id, ownerId=request.user).first()
+        if pet is None:
+            return redirect('/404')
+        else:
+            return render(request, 'home/remove_pet.html', {'pet': pet})
+    else:
+        redirect('/profile')
+
+
+def delete_pet(request):
+    if request.user.is_authenticated and request.method=="POST" and request.POST.get('id') is not None:
+        Pet.objects.filter(id=request.POST.get('id')).delete()
+        messages.info(request, "Your pet has been deleted")
+        return redirect("/profile")
     else:
         return redirect("/")
 
