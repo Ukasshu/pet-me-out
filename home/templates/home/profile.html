@@ -112,6 +112,7 @@
                                                 <p class="text-center">My requests</p>
                                                 {% for requests in stay_requests %}
                                                     <ul class="list-group">
+                                                    <li class="list-group-item"><a href="stayPossibility?id={{ requests.id }}">Link</a></li>
                                                         <li class="list-group-item"><i
                                                                 class="glyphicon glyphicon-calendar"></i>
                                                             Date: {{ requests.startDate }} <i
@@ -147,6 +148,7 @@
                                                 <p class="text-center">My offers</p>
                                                 {% for advert in stay_possibilities %}
                                                     <ul class="list-group">
+                                                        <li class="list-group-item"><a href="stayPossibility?id={{ advert.id }}">Link</a></li>
                                                         <li class="list-group-item"><i
                                                                 class="glyphicon glyphicon-calendar"></i>
                                                             Date: {{ advert.startDate }} <i
