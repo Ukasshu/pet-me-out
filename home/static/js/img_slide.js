@@ -5,12 +5,15 @@ $(function(){
 
         function cycle(){
             // Makes old backgrounds appear beneath new ones
-            $('#backgrounds img').css('z-index','1')
+            $('#backgrounds img').fadeOut(1500)
+           // $('#backgrounds img').css({'display':'none'})
+            $('#backgrounds img').css({'z-index':'1'})
             // Set it to display and opacity 0 so we get the effect
             $('#backgrounds img:nth-child('+counter+')').css({'opacity':'0','display':'block','z-index':'2'})
 
             // Fade the background in
             $('#backgrounds img:nth-child('+counter+')').animate({'opacity':'1'},1500)
+
 
             // increase the counter
             counter++
