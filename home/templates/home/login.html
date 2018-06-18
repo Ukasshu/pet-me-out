@@ -2,6 +2,7 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load static %}
 {% block content %}
     {% if messages %}
         {% for message in messages %}
@@ -17,6 +18,7 @@
     </div>
     {% endif %}
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/dir-pages.css' %}"/>
 <div class="container" style="position: center;">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
