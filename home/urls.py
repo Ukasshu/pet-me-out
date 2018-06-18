@@ -20,5 +20,7 @@ urlpatterns = [
     path("addHostAdvert", views.add_host_advert, name='add_host_advert'),
     path("createHostAdvert", views.create_host_advert, name='create_host_advert'),
     path("removePet", views.remove_pet, name="remove_pet"),
-    path("deletePet", views.delete_pet, name="delete_pet")
+    path("deletePet", views.delete_pet, name="delete_pet"),
+    path("stayRequest", views.stay_req, name="stay_req"),
+    path("stayPosibility", views.stay_pos, name="stay_pos")
 ]

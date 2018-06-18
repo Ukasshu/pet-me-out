@@ -352,7 +352,7 @@ def delete_pet(request):
 
 def stay_req(request):
     if request.user.is_authenticated and request.method == "GET" and request.GET.get('id') is not None:
-        st_rq = StayRequest.objects.filter(id=request.POST.get('id')).first()
+        st_rq = StayRequest.objects.filter(id=request.GET.get('id')).first()
         if st_rq is None:
             return redirect("/404")
         else:
@@ -362,7 +362,24 @@ def stay_req(request):
                 recom = StayPossibility.objects.filter(userId__userdata__city=city)\
                     .filter(startDate__lte=st_rq.startDate)\
                     .filter(endDate__gte=st_rq.endDate)[:5]
-            return render(request, "home/stay_request.html", {"recom":recom, "st_rq": st_rq})
+            return render(request, "home/stay_request.html", {"recom": recom, "st_rq": st_rq})
+    else:
+        return redirect("/")
+
+
+def stay_pos(request):
+    if request.user.is_authenticated and request.method == "GET" and request.GET.get('id') is not None:
+        st_ps = StayPossibility.objects.filter(id=request.GET.get('id')).first()
+        if st_ps is None:
+            return redirect("/404")
+        else:
+            recom = None
+            if st_ps.userId == request.user:
+                city = UserData.objects.filter(userId=request.user).first().city
+                recom = StayRequest.objects.filter(userId__userdata__city=city) \
+                            .filter(startDate__gte=st_ps.startDate) \
+                            .filter(endDate__lte=st_ps.endDate)[:5]
+            return render(request, "home/stay_possibility.html", {"recom": recom, "st_ps": st_ps})
     else:
         return redirect("/")
 
