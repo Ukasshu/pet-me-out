@@ -44,6 +44,7 @@ justify-content: space-around;
 #div-inline{
 
     display: inline-block;
+    font-size: smaller;
 }
 #backgrounds{
     padding-bottom: 35px;
