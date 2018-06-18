@@ -43,7 +43,7 @@
                                 <ul class="nav nav-pills nav-stacked admin-menu">
                                     <li class="active"><a href="" data-target-id="profile"><i
                                             class="glyphicon glyphicon-user"></i> About me</a></li>
-                                    <li><a href="" data-target-id="aboutMe"><i
+                                    <li><a href="" data-target-id="adverts"><i
                                             class="glyphicon glyphicon-pencil"></i> Add advert</a></li>
                                     <li><a href="" data-target-id="pets"><i class="glyphicon glyphicon-heart"></i> Pets</a>
                                     </li>
@@ -94,18 +94,51 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-9 admin-content" id="aboutMe">
-                                <div class="panel panel-warning" style="margin: 1em;">
+                            <div class="col-md-9 admin-content" id="adverts">
+                                {% csrf_token %}
+                                <div class="panel panel-info" style="margin: 1em;">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title">Some words about me ...</h3>
+                                        <h3 class="panel-title">My adverts</h3>
                                     </div>
                                     <div class="panel-body">
+                                        <div class="row">
+                                            {% if stay_requests == Nil %}
+                                                <div class="alert alert-info" role="alert">
+                                                    You haven't added any requests adverts yet.
+                                                </div>
+                                            {% endif %}
 
+                                            <div class="col-xs-12 col-sm-auto">
+                                                {% for requests in stay_requests %}
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item"><i
+                                                                class="glyphicon glyphicon-calendar"></i>
+                                                            Date: {{ requests.startDate }} <i
+                                                                    class="glyphicon glyphicon-arrow-right"></i> {{ requests.endDate }}
+                                                        </li>
+                                                        <li class="list-group-item"><i
+                                                                class="glyphicon glyphicon-home"></i> Host
+                                                            city: {{ user_data.city }}</li>
+                                                        <li class="list-group-item">Pet</li>
+                                                    </ul>
+
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     </div>
+                                    {#                                    <div class="row2">#}
+                                    {#                                        <form class="form-login" method="post" action="/addAdvert">#}
+                                    {#                                            {% csrf_token %}#}
+                                    {#                                            {{ form.as_p }}#}
+                                    {#                                            <button class="btn btn-outline-primary" type="submit">#}
+                                    {#                                                Add new advert#}
+                                    {#                                            </button>#}
+                                    {#                                        </form>#}
+                                    {#                                    </div>#}
                                 </div>
                             </div>
                             <div class="col-md-9 admin-content" id="pets">
-                                <div class="panel panel-warning" style="margin: 1em;">
+                                <div class="panel panel-info" style="margin: 1em;">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">My pets</h3>
                                     </div>
