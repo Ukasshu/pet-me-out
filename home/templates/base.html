@@ -1,14 +1,15 @@
-{% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+
 {% load staticfiles %}
-<script src="{% static "js/jquery-1.11.1.js" %}"></script>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
 <link rel="icon" href="../static/favicon.ico"/>
 <script src="{% static "js/jquery.js" %}"></script>
 <script src="{% static "js/profile.js" %}"></script>
-<script src="{% static "js/calendar.js" %}"></script>
+
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -10,9 +10,11 @@ PET_TYPE_CHOICES = (
 )
 
 
+class MyDateInput(forms.DateInput):  # inner class for input type date - otherwise render as text input
+    input_type = 'date'
+
+
 class RegisterForm(forms.Form):
-    class MyDateInput(forms.DateInput):  # inner class for input type date - otherwise render as text input
-        input_type = 'date'
 
     numeric = RegexValidator(r'^\+?1?\d{9,15}$',
                              "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
@@ -58,3 +60,13 @@ class AddPetForm(forms.Form):
     age = forms.IntegerField(label="", min_value=0, required=True,
                              widget=forms.NumberInput(attrs={'placeholder': 'Age (years)', 'class': 'form-control'}))
     img = forms.ImageField(label="", required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
+
+
+class AddAdertForm(forms.Form):
+    def __init__(self, choices):
+        pets = forms.MultipleChoiceField(choices=choices)
+
+    dateFrom = forms.DateField(widget=MyDateInput(attrs={'class': 'form-control'}))
+    dateTo = forms.DateField(widget=MyDateInput(attrs={'class': 'form-control'}))
+    pets = None
+    advertType = forms.ChoiceField(choices=(('Host', "Host"), ("Guest", "Guest")))
