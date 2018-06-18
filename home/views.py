@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 
-from .models import User, UserData, Pet
+from .models import User, UserData, Pet, StayPossibility, StayRequest
 
 
 # Create your views here.
@@ -137,9 +137,13 @@ def profile(request):
                 user = User.objects.filter(id=_id).first()
                 user_data = UserData.objects.filter(userId=user).first()
                 pets = Pet.objects.filter(ownerId=user)
+                stay_requests = StayRequest.objects.filter(userId=user)
+                stay_possibilities = StayPossibility.objects.filter(userId=user)
+
                 if user is not None and user_data is not None:
                     return render(request, 'home/profile.html',
-                                  {'user': user, 'user_data': user_data, 'pets': pets,
+                                  {'user': user, 'user_data': user_data, 'pets': pets, 'stay_requests': stay_requests,
+                                   'stay_possibilities': stay_possibilities,
                                    'logout': False})
                 else:
                     return redirect("/profile")
@@ -150,9 +154,12 @@ def profile(request):
                 user = request.user
                 user_data = UserData.objects.filter(userId=user).first()
                 pets = Pet.objects.filter(ownerId=user)
+                stay_requests = StayRequest.objects.filter(userId=user)
+                stay_possibilities = StayPossibility.objects.filter(userId=user)
                 if user is not None and user_data is not None:
                     return render(request, 'home/profile.html',
-                                  {'user': user, 'user_data': user_data, 'pets': pets, 'logout': True})
+                                  {'user': user, 'user_data': user_data, 'pets': pets, 'stay_requests': stay_requests,
+                                   'stay_possibilities': stay_possibilities, 'logout': True})
                 else:
                     return redirect("/")
             else:
@@ -246,14 +253,16 @@ def not_found(request):
 def add_advert(request):
     if request.user.is_authenticated:
         pets = Pet.objects.filter(ownerId=request.user)
-        pets_choices = tuple(map(lambda p: (p, p.name),pets))
+        pets_choices = tuple(map(lambda p: (p, p.name), pets))
         form = AddAdvertForm(pets_choices)
         return render(request, 'home/add_advert.html', {'form': form})
     else:
         return redirect("/")
 
+
 def create_advert(request):
     return "<h1>xD</h2>"
+
 
 def test(request):
     return render(request, 'home/test.html')
