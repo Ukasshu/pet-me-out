@@ -1,0 +1,29 @@
+#content {
+    background-image: url("../img/404.png");
+    background-position: center, top;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 45px;
+    padding-bottom: 45px;
+    position: sticky;
+}
+
+.row{
+    max-width: 100%;
+    margin-left:0px;
+    margin-right:0px;
+}
+
+/*
+#content:first-child {
+    background-image: url("../img/bck-img/one.png");
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+   !* heigh: auto;*!
+        width: 100%;
+    heigh: auto;
+}*/

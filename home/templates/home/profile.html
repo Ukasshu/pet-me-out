@@ -41,8 +41,10 @@
 
                                             <div class="profile-header" style="margin-left: 35px;position: static">
                                                 <div> .</div>
-                                                <div>{{ user.first_name }}</div><div>{{ user.last_name }}</div>
-                                                <div> .</div><div> .</div>
+                                                <div>{{ user.first_name }}</div>
+                                                <div>{{ user.last_name }}</div>
+                                                <div> .</div>
+                                                <div> .</div>
 
                                             </div>
                                             <div class="rank-label-container">
@@ -112,10 +114,24 @@
                                         {% else %}
 
                                             <div class="col-xs-12 col-sm-auto">
-                                                <p class="text-center">My requests</p>
+                                                <p class="text-center">Host my pets</p>
                                                 {% for requests in stay_requests %}
                                                     <ul class="list-group">
-                                                    <li class="list-group-item"><a href="stayRequest?id={{ requests.id }}">Link</a></li>
+
+                                                        <li class="list-group-item">
+
+
+                                                            <div class="row">
+
+                                                                <img class="img-circle" {% if logout %}
+                                                                     id="petsAvatar" {% endif %}
+                                                                     src={{ requests.petId.photo.url }} style="width:70px;height:70px;display:inline-block"/>
+                                                            </div>
+                                                         <div style="font-size: large">{{ requests.petId.name }}
+                                                            </div>
+
+                                                        </li>
+
                                                         <li class="list-group-item"><i
                                                                 class="glyphicon glyphicon-calendar"></i>
                                                             Date: {{ requests.startDate }} <i
@@ -124,8 +140,10 @@
                                                         <li class="list-group-item"><i
                                                                 class="glyphicon glyphicon-home"></i> Host
                                                             city: {{ user_data.city }}</li>
-                                                        <li class="list-group-item">🐾
-                                                            Pet: {{ requests.petId.name }}</li>
+
+                                                        <li class="list-group-item"><a
+                                                                href="stayRequest?id={{ requests.id }}">more info...</a>
+                                                        </li>
                                                     </ul>
 
                                                 {% endfor %}
@@ -151,7 +169,8 @@
                                                 <p class="text-center">My offers</p>
                                                 {% for advert in stay_possibilities %}
                                                     <ul class="list-group">
-                                                        <li class="list-group-item"><a href="stayPossibility?id={{ advert.id }}">Link</a></li>
+                                                        <li class="list-group-item"><a
+                                                                href="stayPossibility?id={{ advert.id }}">Link</a></li>
                                                         <li class="list-group-item"><i
                                                                 class="glyphicon glyphicon-calendar"></i>
                                                             Date: {{ advert.startDate }} <i
@@ -187,7 +206,7 @@
                         <div class="col-md-9 admin-content" id="pets">
                             <div class="panel panel-default" style="margin: 1em;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title" style="font-family: Lato;font-size:x-large">Meet my
+                                    <h3 class="panel-title" style="font-family: Lato;font-size:large">Meet my
                                         pets:</h3>
                                 </div>
                                 <div class="panel-body">
