@@ -605,7 +605,7 @@ def hosts(request):
         user_data = UserData.objects.filter(userId=user_id).first()
         home_city = user_data.city
         allPossibilities = StayPossibility.objects.filter(startDate__lte=dateFrom, endDate__gte=dateTo,
-                                                          petType=petsType)
+                                                          petType=petsType, userId__userdata__city=home_city)
         hostsPossibilities = allPossibilities.filter(~Q(userId=user_id))
         if not hostsPossibilities:
             hosts_data = None
@@ -614,7 +614,7 @@ def hosts(request):
             ids = tuple(map(lambda h: h.userId, hostsPossibilities))
             query = reduce(operator.or_, (Q(userId=x) for x in ids))
             hosts_data = UserData.objects.filter(query, city=home_city)
-            possibilities = StayPossibility.objects.filter(query)
+            possibilities = hostsPossibilities
         return render(request, 'home/hosts.html',
                       {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo})
     else:
