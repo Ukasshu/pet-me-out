@@ -25,4 +25,4 @@ urlpatterns = [
     path('', include('home.urls')),
     path('login/', auth_views.login, name='login'),
     path('logout/', auth_views.logout, name='logout'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #+ [re_path(r".*", not_found, name="not_found")]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [re_path(r".*", not_found, name="not_found")]
