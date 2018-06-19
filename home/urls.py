@@ -28,5 +28,6 @@ urlpatterns = [
     path("acceptStay", views.accept_stay, name="accept_stay"),
     path("refuseStay", views.refuse_stay, name="refuse_stay"),
     path("staysManagement", views.stays_management, name="stays_management"),
-    path("addComment", views.add_comment, name="add_comment")
+    path("addComment", views.add_comment, name="add_comment"),
+    path("guests", views.guests, name="guests")
 ]

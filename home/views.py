@@ -619,3 +619,28 @@ def hosts(request):
                       {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo})
     else:
         return render(request, 'home/not_found.html')
+
+
+def guests(request):
+    if request.user.is_authenticated and request.method == 'GET':
+        dateFrom = request.GET.get('dateFrom')
+        dateTo = request.GET.get('dateTo')
+        petsType = request.GET.get('pets')
+        user_id = request.user
+        user_data = UserData.objects.filter(userId=user_id).first()
+        home_city = user_data.city
+        all_requests = StayRequest.objects.filter(startDate__lte=dateFrom, endDate__gte=dateTo,
+                                                  petId__type=petsType, userId__userdata__city=home_city)
+        filteredRequests = all_requests.filter(~Q(userId=user_id))
+        if not filteredRequests:
+            owners_data = None
+            requests = None
+        else:
+            ids = tuple(map(lambda h: h.userId, filteredRequests))
+            query = reduce(operator.or_, (Q(userId=x) for x in ids))
+            owners_data = UserData.objects.filter(query, city=home_city)
+            requests = filteredRequests
+        return render(request, 'home/guests.html',
+                      {'owners': owners_data, 'requests': requests, 'from': dateFrom, 'to': dateTo})
+    else:
+        return render(request, 'home/not_found.html')

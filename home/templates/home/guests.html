@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% static 'static_jquery/js/jquery.js' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dir-pages.css' %}"/>
+    <div class="container" style="position: center;">
+
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-md-offset-4">
+                {% if not owners %}
+                    <div class="col-xs-16 col-sm-16">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <p>There are no suitable adverts.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                {% else %}
+                    {% for owner in owners %}
+                        <div class="col-xs-16 col-sm-16">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <img class="img-circle"
+                                             src={{ owner.photo.url }} style="width:110px;height:110px;display:inline-block"/>
+                                    </div>
+                                    <div style="font-size: large">👱 My name
+                                        is {{ owner.userId.first_name }} {{ owner.userId.last_name }} and I want you to
+                                        host
+                                        my pet :)
+                                    </div>
+                                </li>
+                                <li class="list-group-item">👱 Owner: <a
+                                        href="/profile?id={{ owner.userId.id }}">{{ owner.userId.first_name }}</a></li>
+                                <li class="list-group-item">🏙️ City: {{ owner.city }}</li>
+                                {% for r in requests %}
+                                    {% if owner.userId == r.userId %}
+                                        <li class="list-group-item">📅 From: {{ r.startDate }}</li>
+                                        <li class="list-group-item">📅 To: {{ r.endDate }}</li>
+                                        <li class="list-group-item"> More info about advert: <a
+                                                href="/stayRequest?id={{ r.id }}">More info</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
