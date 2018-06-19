@@ -24,7 +24,7 @@
                             </div>
                             <div style="font-size: large">My name is {{ st_rq.petId.name }} and I am
                                 {% if st_rq.petId.type == "Other" %}{{ st_rq.petId.other }}{% else %}
-                                {{ st_rq.petId.type }}{% endif %}
+                                    {{ st_rq.petId.type }}{% endif %}
                             </div>
                         </li>
                         <li class="list-group-item">👱 Owner: <a
@@ -32,9 +32,9 @@
                         <li class="list-group-item">🏙️ City: {{ city }}</li>
                         <li class="list-group-item">📅 From: {{ st_rq.startDate }}</li>
                         <li class="list-group-item">📅 To: {{ st_rq.endDate }}</li>
-                        <li class="list-group-item">
-                            {% if request.user != st_rq.userId %}
-                            <form method="post" action="proposeStay">
+                        {% if request.user != st_rq.userId %}
+                            <li class="list-group-item">
+                                <form method="post" action="proposeStay">
                                     {% csrf_token %}
                                     <input type="hidden" name="pos">
                                     <input type="hidden" name="req" value={{ r.id }}>
@@ -43,8 +43,9 @@
                                         Offer care
                                     </button>
                                 </form>
-                            {% endif %}
-                        </li>
+                            </li>
+                        {% endif %}
+
 
                     </ul>
                 </div>
