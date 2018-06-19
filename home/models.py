@@ -24,17 +24,6 @@ class Pet(models.Model):
     photo = models.ImageField(upload_to='home/pic_folder/pets/', default='no-animal-img.png')
 
 
-class Stay(models.Model):
-    ownerId = models.ForeignKey(User, related_name="Owner", on_delete=models.CASCADE, default=None)
-    caretakerId = models.ForeignKey(User, related_name="Caretaker", on_delete=models.CASCADE, default=None)
-    petId = models.ForeignKey(Pet, on_delete=models.CASCADE, default=None)
-    date = models.DateField(default=None)
-    ownerOpinion = models.CharField(max_length=250, default=None)
-    ownerOpinionType = models.CharField(max_length=1, default=None)
-    caretakerOpinion = models.CharField(max_length=250, default=None)
-    caretakerOpinionType = models.CharField(max_length=1, default=None)
-
-
 class StayRequest(models.Model):
     userId = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     petId = models.ForeignKey(Pet, on_delete=models.CASCADE, default=None)
@@ -47,6 +36,23 @@ class StayPossibility(models.Model):
     startDate = models.DateField(default=None)
     endDate = models.DateField(default=None)
     petType = models.CharField(default=None, max_length=10)
+
+
+class Stay(models.Model):
+    owner = models.ForeignKey(User, related_name="Owner", on_delete=models.SET_NULL, default=None, null=True)
+    caretaker = models.ForeignKey(User, related_name="Caretaker", on_delete=models.SET_NULL, default=None, null=True)
+    pet = models.ForeignKey(Pet, related_name="Pet", on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    possibility = models.ForeignKey(StayPossibility, related_name="Possibility", on_delete=models.SET_NULL, null=True,
+                                    blank=True)
+    request = models.ForeignKey(StayRequest, related_name="Request", on_delete=models.SET_NULL, null=True, blank=True)
+    posAgree = models.BooleanField(default=False, null=False)
+    reqAgree = models.BooleanField(default=False, null=False)
+    startDate = models.DateField(default=None)
+    endDate = models.DateField(default=None)
+    ownerOpinion = models.CharField(max_length=250, default=None, null=True, blank=True)
+    ownerType = models.PositiveSmallIntegerField(default=None, null=True, blank=True)
+    caretakerOpinion = models.CharField(max_length=250, default=None, null=True, blank=True)
+    caretakerType = models.PositiveSmallIntegerField(default=None, null=True, blank=True)
 
 
 class Conversation(models.Model):
