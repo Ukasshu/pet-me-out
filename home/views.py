@@ -627,6 +627,8 @@ def add_comment(request):
 
 def hosts(request):
     if request.user.is_authenticated and request.method == 'GET':
+        user_photo = UserData.objects.filter(userId=request.user).first().photo
+        notifications = check_notifications(request.user)
         dateFrom = request.GET.get('dateFrom')
         dateTo = request.GET.get('dateTo')
         petsType = request.GET.get('pets')
@@ -645,6 +647,6 @@ def hosts(request):
             hosts_data = UserData.objects.filter(query, city=home_city)
             possibilities = hostsPossibilities
         return render(request, 'home/hosts.html',
-                      {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo})
+                      {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo, "user_photo": user_photo, "notifications": notifications})
     else:
-        return render(request, 'home/not_found.html')
+        return redirect("/")
