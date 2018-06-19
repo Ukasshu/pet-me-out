@@ -660,11 +660,11 @@ def guests(request):
         user_id = request.user
         user_data = UserData.objects.filter(userId=user_id).first()
         home_city = user_data.city
-        all_requests = StayRequest.objects.filter(startDate__lte=dateFrom, endDate__gte=dateTo,
+        all_requests = StayRequest.objects.filter(startDate__gte=dateFrom, endDate__lte=dateTo,
                                                   petId__type=petsType, userId__userdata__city=home_city)
         filteredRequests = all_requests.filter(~Q(userId=user_id))
         if not filteredRequests:
-            owners_data = None
+            pets_data = None
             requests = None
         else:
             pets_data = list(map(lambda r: r.petId, filteredRequests))
