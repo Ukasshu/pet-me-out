@@ -41,17 +41,18 @@ class StayPossibility(models.Model):
 class Stay(models.Model):
     owner = models.ForeignKey(User, related_name="Owner", on_delete=models.SET_NULL, default=None, null=True)
     caretaker = models.ForeignKey(User, related_name="Caretaker", on_delete=models.SET_NULL, default=None, null=True)
-    pet = models.ForeignKey(Pet, related_name="Pet", on_delete=models.SET_NULL, default=None, null=True)
-    possibility = models.ForeignKey(StayPossibility, related_name="Possibility", on_delete=models.SET_NULL, null=True)
-    request = models.ForeignKey(StayRequest, related_name="Request", on_delete=models.SET_NULL, null=True)
+    pet = models.ForeignKey(Pet, related_name="Pet", on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    possibility = models.ForeignKey(StayPossibility, related_name="Possibility", on_delete=models.SET_NULL, null=True,
+                                    blank=True)
+    request = models.ForeignKey(StayRequest, related_name="Request", on_delete=models.SET_NULL, null=True, blank=True)
     posAgree = models.BooleanField(default=False, null=False)
     reqAgree = models.BooleanField(default=False, null=False)
     startDate = models.DateField(default=None)
     endDate = models.DateField(default=None)
-    ownerOpinion = models.CharField(max_length=250, default=None, null=True)
-    ownerType = models.PositiveSmallIntegerField(default=None, null=True)
-    caretakerOpinion = models.CharField(max_length=250, default=None, null=True)
-    caretakerType = models.PositiveSmallIntegerField(default=None, null=True)
+    ownerOpinion = models.CharField(max_length=250, default=None, null=True, blank=True)
+    ownerType = models.PositiveSmallIntegerField(default=None, null=True, blank=True)
+    caretakerOpinion = models.CharField(max_length=250, default=None, null=True, blank=True)
+    caretakerType = models.PositiveSmallIntegerField(default=None, null=True, blank=True)
 
 
 class Conversation(models.Model):

@@ -11,7 +11,9 @@
 
         <div class="row">
             <div class="col-sm-6 col-md-4 col-md-offset-4">
-                <h1 class="text-center login-title" style="font-family:lobster;">Stay possibility</h1>
+                <h1 class="text-center login-title" style="font-family:lobster;">Stays management</h1>
+
+                {# PENDING STAYS #}
                 <div class="col-xs-16 col-sm-16">
                     <ul class="list-group">
                         <li class="list-group-item"><b>Pending stays</b></li>
@@ -21,8 +23,20 @@
                         {% else %}
                             {% for r in pending.req %}
                                 <li class="list-group-item">
-                                    <p>User:{{ r.caretaker.username }}</p>
-                                    <p></p>
+                                    <p>Caretaker: <a
+                                            href="/profile?id={{ r.caretaker.id }}">{{ r.caretaker.username }}</a></p>
+                                    <p>Pet: {{ r.pet.name }}</p>
+                                    <p>Time: {{ r.startDate }} - {{ r.endDate }}</p>
+                                    <p>
+                                    <form method="post" action="/refuseStay">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value={{ r.id }}>
+                                        <input type="hidden" name="side" value="req">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            Refuse
+                                        </button>
+                                    </form>
+                                    </p>
                                 </li>
                             {% endfor %}
                         {% endif %}
@@ -32,8 +46,245 @@
                         {% else %}
                             {% for p in pending.pos %}
                                 <li class="list-group-item">
-                                    <p>User:{{ r.owner.username }}</p>
-                                    <p></p>
+                                    <p>Owner: <a href="/profile?id={{ p.owner.id }}">{{ p.owner.username }}</a></p>
+                                    <p>Pet: {{ p.pet.name }}</p>
+                                    <p>Time: {{ p.startDate }} - {{ p.endDate }}</p>
+                                    <p>
+                                    <form method="post" action="/refuseStay">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value={{ p.id }}>
+                                        <input type="hidden" name="side" value="pos">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            Refuse
+                                        </button>
+                                    </form>
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {# STAY OFFERS #}
+                <div class="col-xs-16 col-sm-16">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>Stay offers</b></li>
+                        <li class="list-group-item"><i>Requests</i></li>
+                        {% if offers.req|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for r in offers.req %}
+                                <li class="list-group-item">
+                                    <p>Caretaker: <a
+                                            href="/profile?id={{ r.caretaker.id }}">{{ r.caretaker.username }}</a></p>
+                                    <p>Pet: {{ r.pet.name }}</p>
+                                    <p>Time: {{ r.startDate }} - {{ r.endDate }}</p>
+                                    <p>
+                                    <form method="post" action="/acceptStay">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value={{ r.id }}>
+                                        <input type="hidden" name="side" value="req">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            Accept
+                                        </button>
+                                    </form>
+                                    </p>
+                                    <p>
+                                    <form method="post" action="/refuseStay">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value={{ r.id }}>
+                                        <input type="hidden" name="side" value="req">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            Refuse
+                                        </button>
+                                    </form>
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="list-group-item"><i>Possibilities</i></li>
+                        {% if offers.pos|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for p in offers.pos %}
+                                <li class="list-group-item">
+                                    <p>Owner: <a href="/profile?id={{ p.owner.id }}">{{ p.owner.username }}</a></p>
+                                    <p>Pet: {{ p.pet.name }}</p>
+                                    <p>Time: {{ p.startDate }} - {{ p.endDate }}</p>
+                                    <p>
+                                    <form method="post" action="/acceptStay">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value={{ p.id }}>
+                                        <input type="hidden" name="side" value="pos">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            Accept
+                                        </button>
+                                    </form>
+                                    </p>
+                                    <p>
+                                    <form method="post" action="/refuseStay">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value={{ p.id }}>
+                                        <input type="hidden" name="side" value="pos">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            Refuse
+                                        </button>
+                                    </form>
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {# ACTIVE STAYS #}
+                <div class="col-xs-16 col-sm-16">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>Active stays</b></li>
+                        <li class="list-group-item"><i>Requests</i></li>
+                        {% if active.req|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for r in active.req %}
+                                <li class="list-group-item">
+                                    <p>Caretaker: <a
+                                            href="/profile?id={{ r.caretaker.id }}">{{ r.caretaker.username }}</a></p>
+                                    <p>Pet: {{ r.pet.name }}</p>
+                                    <p>Time: {{ r.startDate }} - {{ r.endDate }}</p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="list-group-item"><i>Possibilities</i></li>
+                        {% if active.pos|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for p in active.pos %}
+                                <li class="list-group-item">
+                                    <p>Owner: <a href="/profile?id={{ p.owner.id }}">{{ p.owner.username }}</a></p>
+                                    <p>Pet: {{ p.pet.name }}</p>
+                                    <p>Time: {{ p.startDate }} - {{ p.endDate }}</p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {# FUTURE STAYS #}
+                <div class="col-xs-16 col-sm-16">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>Future stays</b></li>
+                        <li class="list-group-item"><i>Requests</i></li>
+                        {% if future.req|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for r in future.req %}
+                                <li class="list-group-item">
+                                    <p>Caretaker: <a
+                                            href="/profile?id={{ r.caretaker.id }}">{{ r.caretaker.username }}</a>
+                                    </p>
+                                    <p>Pet: {{ r.pet.name }}</p>
+                                    <p>Time: {{ r.startDate }} - {{ r.endDate }}</p>
+                                    <p>
+                                        </form>
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="list-group-item"><i>Possibilities</i></li>
+                        {% if future.pos|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for p in future.pos %}
+                                <li class="list-group-item">
+                                    <p>Owner: <a href="/profile?id={{ p.owner.id }}">{{ p.owner.username }}</a></p>
+                                    <p>Pet: {{ p.pet.name }}</p>
+                                    <p>Time: {{ p.startDate }} - {{ p.endDate }}</p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+
+                {# PAST STAYS #}
+                <div class="col-xs-16 col-sm-16">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>Past stays</b></li>
+                        <li class="list-group-item"><i>Requests</i></li>
+                        {% if past.req|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for r in past.req %}
+                                <li class="list-group-item">
+                                    <p>Caretaker: <a
+                                            href="/profile?id={{ r.caretaker.id }}">{{ r.caretaker.username }}</a>
+                                    </p>
+                                    <p>Pet: {{ r.pet.name }}</p>
+                                    <p>Time: {{ r.startDate }} - {{ r.endDate }}</p>
+                                    {% if r.ownerOpinion != None %}
+                                        <p>Your opinion: {{ r.ownerOpinion }}</p>
+                                        <p>Opinion type: {% if r.ownerType == 1 %}
+                                            <b style="color: red">Negative</b>{% elif r.ownerType == 2 %}
+                                            <b style="color: gray">Neutral</b>{% else %}
+                                            <b style="color: green">Positive</b>{% endif %}</p>
+                                    {% else %}
+                                        <p>
+                                        <form method="post" action="addComment">
+                                            {% csrf_token %}
+                                            <textarea rows="4" cols="50" name="opinion" placeholder="Enter your opinion"
+                                                      required></textarea>
+                                            <input type="hidden" name="id" value={{ r.id }}>
+                                            <input type="hidden" name="side" value="req">
+                                            <select name="type">
+                                                <option value="1" label="Negative">Negative</option>
+                                                <option value="2" label="Neutral">Neutral</option>>
+                                                <option value="3" label="Positive">Positive</option>
+                                            </select>
+                                            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                                Comment
+                                            </button>
+                                        </form>
+                                        </p>
+                                    {% endif %}
+
+
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="list-group-item"><i>Possibilities</i></li>
+                        {% if past.pos|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for p in past.pos %}
+                                <li class="list-group-item">
+                                    <p>Owner: <a href="/profile?id={{ p.owner.id }}">{{ p.owner.username }}</a></p>
+                                    <p>Pet: {{ p.pet.name }}</p>
+                                    <p>Time: {{ p.startDate }} - {{ p.endDate }}</p>
+                                    {% if p.ownerOpinion != None %}
+                                        <p>Your opinion: {{ p.caretakerOpinion }}</p>
+                                        <p>Opinion type: {% if p.caretakerType == 1 %}
+                                            <b style="color: red">Negative</b>{% elif p.caretakerType == 2 %}
+                                            <b style="color: gray">Neutral</b>{% else %}
+                                            <b style="color: green">Positive</b>{% endif %}</p>
+                                    {% else %}
+                                        <p>
+                                        <form method="post" action="addComment">
+                                            {% csrf_token %}
+                                            <textarea rows="4" cols="40" name="opinion" placeholder="Enter your opinion"
+                                                      required></textarea>
+                                            <input type="hidden" name="id" value={{ p.id }}>
+                                            <input type="hidden" name="side" value="pos">
+                                            <select name="type">
+                                                <option value="1" label="Negative">Negative</option>
+                                                <option value="2" label="Neutral">Neutral</option>>
+                                                <option value="3" label="Positive">Positive</option>
+                                            </select>
+                                            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                                Comment
+                                            </button>
+                                        </form>
+                                        </p>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         {% endif %}

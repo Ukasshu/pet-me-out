@@ -473,11 +473,12 @@ def accept_stay(request):
 def refuse_stay(request):
     if request.user.is_authenticated and request.method == "POST":
         if request.POST.get("side") and request.POST.get("id"):
-            st_obj = Stay.objects.first(id=request.POST.get("id")).first()
+            _id = request.POST.get("id")
+            st_obj = Stay.objects.filter(id=_id).first()
             if st_obj is not None:
                 if request.POST.get("side") == "pos" or request.POST.get("side") == "req":
                     st_obj.delete()
-                    messages.info("Stay refused")
+                    messages.info(request,"Stay refused")
                     return redirect("/profile")
                 else:
                     redirect("/404")
@@ -535,5 +536,32 @@ def stays_management(request):
             .filter(reqAgree=True).filter(posAgree=True)
         past_stays = {'req': ps_st_req, 'pos': ps_st_pos}
         return render(request, "home/stay_management.html", {"pending":pending_stays, "offers":stay_offers, "active":active_stays, "future": future_stays, "past": past_stays})
+    else:
+        return redirect("/")
+
+
+def add_comment(request):
+    if request.user.is_authenticated and request.method == "POST":
+        if request.POST.get('opinion') and request.POST.get('type') and request.POST.get('side') and request.POST.get('id'):
+            st_obj = Stay.objects.filter(id=request.POST.get('id')).first()
+            if st_obj is not None:
+                if request.POST.get('side') == "pos":
+                    st_obj.caretakerOpinion = request.POST.get('opinion')
+                    st_obj.caretakerType = int(request.POST.get('type'))
+                    st_obj.save()
+                    messages.info(request, "Opinion added")
+                    return redirect("/staysManagement")
+                elif request.POST.get('side') == "req":
+                    st_obj.ownerOpinion = request.POST.get('opinion')
+                    st_obj.ownerType = int(request.POST.get('type'))
+                    st_obj.save()
+                    messages.info(request, "Opinion added")
+                    return redirect("/staysManagement")
+                else:
+                    redirect('/404')
+            else:
+                redirect('/404')
+        else:
+            redirect('/404')
     else:
         return redirect("/")
