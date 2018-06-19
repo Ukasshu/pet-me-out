@@ -27,7 +27,16 @@
                             {% endfor %}
                         {% endif %}
                         <li class="list-group-item"><i>Possibilities</i></li>
-                        {#                        Miejsce na drugiego fora i ifa#}
+                        {% if pending.pos|length == 0 %}
+                            <li class="list-group-item">Nothing to show</li>
+                        {% else %}
+                            {% for p in pending.pos %}
+                                <li class="list-group-item">
+                                    <p>User:{{ r.owner.username }}</p>
+                                    <p></p>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
 
