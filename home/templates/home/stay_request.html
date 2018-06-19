@@ -32,6 +32,19 @@
                         <li class="list-group-item">🏙️ City: {{ city }}</li>
                         <li class="list-group-item">📅 From: {{ st_rq.startDate }}</li>
                         <li class="list-group-item">📅 To: {{ st_rq.endDate }}</li>
+                        <li>
+                            {% if request.user != st_rq.userId %}
+                            <form method="post" action="proposeStay">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="pos">
+                                    <input type="hidden" name="req" value={{ r.id }}>
+                                    <input type="hidden" name="side" value="pos">
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                        Offer care
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </li>
 
                     </ul>
                 </div>

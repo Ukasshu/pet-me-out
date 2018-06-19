@@ -46,6 +46,14 @@ def get_reputation(user):
     return {'ct': ct, 'ow': ow}
 
 
+def check_notifications(user):
+    if Stay.objects.filter(owner=user).filter(reqAgree=False).count() > 0 or Stay.objects.filter(
+            caretaker=user).filter(posAgree=False).count() > 0:
+        return True
+    else:
+        return False
+
+
 # Create your views here.
 def home(request):
     if not request.user.is_authenticated:
@@ -53,7 +61,8 @@ def home(request):
     else:
         user_photo = UserData.objects.filter(userId=request.user).first().photo
         form = PetsTypes()
-        return render(request, 'home/welcomePageLoggedIn.html', {'user_photo': user_photo, 'form': form})
+        return render(request, 'home/welcomePageLoggedIn.html',
+                      {'user_photo': user_photo, 'notifications': check_notifications(request.user), 'form': form})
 
 
 def register(request):
@@ -172,6 +181,7 @@ def profile(request):
                     return render(request, 'home/profile.html',
                                   {'user': user, 'user_data': user_data, 'pets': pets, 'stay_requests': stay_requests,
                                    'stay_possibilities': stay_possibilities, 'logout': True, 'user_photo': user_photo,
+                                   'notifications': check_notifications(request.user),
                                    'rep': rep})
                 else:
                     return redirect("/")
@@ -185,7 +195,8 @@ def add_photo(request):
     if request.user.is_authenticated:
         user_photo = UserData.objects.filter(userId=request.user).first().photo
         form = ImageUploadForm()
-        return render(request, 'home/upload_photo.html', {'form': form, 'user_photo': user_photo})
+        return render(request, 'home/upload_photo.html',
+                      {'form': form, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         redirect('/')
 
@@ -210,7 +221,8 @@ def add_pet(request):
     if request.user.is_authenticated:
         user_photo = UserData.objects.filter(userId=request.user).first().photo
         form = AddPetForm()
-        return render(request, 'home/add_pet.html', {'form': form, 'user_photo': user_photo})
+        return render(request, 'home/add_pet.html',
+                      {'form': form, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -261,7 +273,8 @@ def create_pet(request):
 def not_found(request):
     if request.user.is_authenticated:
         user_photo = UserData.objects.filter(userId=request.user).first().photo
-        return render(request, 'home/not_found.html', {'user_photo': user_photo})
+        return render(request, 'home/not_found.html',
+                      {'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -271,7 +284,8 @@ def add_guest_advert(request):
         user_photo = UserData.objects.filter(userId=request.user).first().photo
         pets_choices = tuple(map(lambda p: (p.id, p.name), Pet.objects.filter(ownerId=request.user)))
         form = AddGuestAdvertForm(pets_choices, None)
-        return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo})
+        return render(request, 'home/add_guest_advert.html',
+                      {'form': form, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -280,7 +294,8 @@ def add_host_advert(request):
     if request.user.is_authenticated:
         user_photo = UserData.objects.filter(userId=request.user).first().photo
         form = AddHostAdvertForm()
-        return render(request, 'home/add_host_advert.html', {'form': form, 'user_photo': user_photo})
+        return render(request, 'home/add_host_advert.html',
+                      {'form': form, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -295,10 +310,14 @@ def create_guest_advert(request):
             date_to = form.cleaned_data.get("dateTo")
             if date_from > date_to:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
-                return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo})
+                return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo,
+                                                                      'notifications': check_notifications(
+                                                                          request.user)})
             elif date_from < datetime.datetime.today().date():
                 messages.warning(request, "🚀 Time travels unavailable yet 🚀")
-                return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo})
+                return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo,
+                                                                      'notifications': check_notifications(
+                                                                          request.user)})
             else:
                 user = request.user
                 for petId in form.cleaned_data.get('pets'):
@@ -312,7 +331,8 @@ def create_guest_advert(request):
                 messages.info(request, "Advert successfully added")
                 return redirect('/profile')
         else:
-            return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo})
+            return render(request, 'home/add_guest_advert.html',
+                          {'form': form, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -326,10 +346,14 @@ def create_host_advert(request):
             date_to = form.cleaned_data.get('dateTo')
             if date_from > date_to:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
-                return render(request, 'home/add_host_advert.html', {'form': form, 'user_photo': user_photo})
+                return render(request, 'home/add_host_advert.html', {'form': form, 'user_photo': user_photo,
+                                                                     'notifications': check_notifications(
+                                                                         request.user)})
             elif date_from < datetime.datetime.today().date():
                 messages.warning(request, "🚀 Time travels unavailable yet 🚀")
-                return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo})
+                return render(request, 'home/add_guest_advert.html', {'form': form, 'user_photo': user_photo,
+                                                                      'notifications': check_notifications(
+                                                                          request.user)})
             else:
                 pet_type = form.cleaned_data.get('type')
                 StayPossibility.objects.create(
@@ -341,7 +365,8 @@ def create_host_advert(request):
                 messages.info(request, "Advert successfully added")
                 return redirect('/profile')
         else:
-            return render(request, "home/add_host_advert.html", {'form': form, 'user_photo': user_photo})
+            return render(request, "home/add_host_advert.html",
+                          {'form': form, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -354,7 +379,8 @@ def remove_pet(request):
         if pet is None:
             return redirect('/404')
         else:
-            return render(request, 'home/remove_pet.html', {'pet': pet, 'user_photo': user_photo})
+            return render(request, 'home/remove_pet.html',
+                          {'pet': pet, 'user_photo': user_photo, 'notifications': check_notifications(request.user)})
     else:
         redirect('/profile')
 
@@ -376,15 +402,16 @@ def stay_req(request):
         else:
             city_arg = UserData.objects.filter(userId=st_rq.userId).first().city
             recom = None
+            user_photo = UserData.objects.filter(userId=request.user).first().photo
             if st_rq.userId == request.user:
-                user_photo = UserData.objects.filter(userId=request.user).first().photo
                 city = UserData.objects.filter(userId=request.user).first().city
                 recom = StayPossibility.objects.filter(userId__userdata__city=city) \
                             .filter(startDate__lte=st_rq.startDate) \
                             .filter(endDate__gte=st_rq.endDate) \
                             .exclude(userId=request.user)[:5]
             return render(request, "home/stay_request.html",
-                          {"recom": recom, "st_rq": st_rq, 'city': city_arg, 'user_photo': user_photo})
+                          {"recom": recom, "st_rq": st_rq, 'city': city_arg, 'user_photo': user_photo,
+                           'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -408,7 +435,8 @@ def stay_pos(request):
                     recom = recom.filter(petId__type=st_ps.petType)
                 recom = recom[:5]
             return render(request, "home/stay_possibility.html",
-                          {"recom": recom, "st_ps": st_ps, 'city': city_arg, 'user_photo': user_photo})
+                          {"recom": recom, "st_ps": st_ps, 'city': city_arg, 'user_photo': user_photo,
+                           'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -563,7 +591,8 @@ def stays_management(request):
 
         return render(request, "home/stay_management.html",
                       {"pending": pending_stays, "offers": stay_offers, "active": active_stays, "future": future_stays,
-                       "past": past_stays, 'user_photo': user_photo})
+                       "past": past_stays, 'user_photo': user_photo,
+                       'notifications': check_notifications(request.user)})
     else:
         return redirect("/")
 
@@ -598,6 +627,8 @@ def add_comment(request):
 
 def hosts(request):
     if request.user.is_authenticated and request.method == 'GET':
+        user_photo = UserData.objects.filter(userId=request.user).first().photo
+        notifications = check_notifications(request.user)
         dateFrom = request.GET.get('dateFrom')
         dateTo = request.GET.get('dateTo')
         petsType = request.GET.get('pets')
@@ -616,9 +647,9 @@ def hosts(request):
             hosts_data = UserData.objects.filter(query, city=home_city)
             possibilities = hostsPossibilities
         return render(request, 'home/hosts.html',
-                      {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo})
+                      {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo, "user_photo": user_photo, "notifications": notifications})
     else:
-        return render(request, 'home/not_found.html')
+        return redirect("/")
 
 
 def guests(request):
