@@ -144,12 +144,18 @@ body {
 
 }
 
-.frontpage-wrapper>div{
+/*.frontpage-wrapper>div{
     display: inline-block;
-}
+}*/
 
 .form-group>div{
     font-family: Lato;
+}
+
+.navbar-form{
+     font-family: Lato;
+    font-size: large;
+
 }
 
 #panel-search, #panel-profile {
