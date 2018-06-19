@@ -12,6 +12,37 @@ import datetime
 from .models import User, UserData, Pet, StayPossibility, StayRequest, Stay
 
 
+def get_reputation(user):
+    # reputation
+    # caretaker
+    neg = Stay.objects.filter(caretaker=user) \
+        .exclude(caretakerOpinion=None) \
+        .filter(caretakerType=1).count()
+    neu = Stay.objects.filter(caretaker=user) \
+        .exclude(caretakerOpinion=None) \
+        .filter(caretakerType=2).count()
+    pos = Stay.objects.filter(caretaker=user) \
+        .exclude(caretakerOpinion=None) \
+        .filter(caretakerType=3).count()
+
+    ct = {'neg': neg, 'neu': neu, 'pos': pos}
+
+    # owner
+    neg = Stay.objects.filter(owner=user) \
+        .exclude(ownerOpinion=None) \
+        .filter(ownerType=1).count()
+    neu = Stay.objects.filter(owner=user) \
+        .exclude(ownerOpinion=None) \
+        .filter(ownerType=2).count()
+    pos = Stay.objects.filter(owner=user) \
+        .exclude(ownerOpinion=None) \
+        .filter(ownerType=3).count()
+
+    ow = {'neg': neg, 'neu': neu, 'pos': pos}
+
+    return {'ct': ct, 'ow': ow}
+
+
 # Create your views here.
 def home(request):
     if not request.user.is_authenticated:
@@ -115,10 +146,12 @@ def profile(request):
                 stay_possibilities = StayPossibility.objects.filter(userId=user)
 
                 if user is not None and user_data is not None:
+                    rep = get_reputation(user)
+
                     return render(request, 'home/profile.html',
                                   {'user': user, 'user_data': user_data, 'pets': pets, 'stay_requests': stay_requests,
                                    'stay_possibilities': stay_possibilities,
-                                   'logout': False, "user_photo": user_photo})
+                                   'logout': False, "user_photo": user_photo, 'rep': rep})
                 else:
                     return redirect("/profile")
             except ValueError:
@@ -131,9 +164,11 @@ def profile(request):
                 stay_requests = StayRequest.objects.filter(userId=user)
                 stay_possibilities = StayPossibility.objects.filter(userId=user)
                 if user is not None and user_data is not None:
+                    rep = get_reputation(user)
                     return render(request, 'home/profile.html',
                                   {'user': user, 'user_data': user_data, 'pets': pets, 'stay_requests': stay_requests,
-                                   'stay_possibilities': stay_possibilities, 'logout': True, 'user_photo': user_photo})
+                                   'stay_possibilities': stay_possibilities, 'logout': True, 'user_photo': user_photo,
+                                   'rep': rep})
                 else:
                     return redirect("/")
             else:

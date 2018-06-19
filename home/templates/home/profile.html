@@ -298,6 +298,39 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
+                                          <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <td></td>
+                                                <td>💚</td>
+                                                <td>🖤</td>
+                                                <td>💔</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>As caretaker</td>
+                                                <td>{{ rep.ct.pos }}</td>
+                                                <td>{{ rep.ct.neu }}</td>
+                                                <td>{{ rep.ct.neg }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>As owner</td>
+                                                <td>{{ rep.ow.pos }}</td>
+                                                <td>{{ rep.ow.neu }}</td>
+                                                <td>{{ rep.ow.neg }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total</td>
+                                                <td>{{ rep.ct.pos|add:rep.ow.pos }}</td>
+                                                <td>{{ rep.ct.neu|add:rep.ow.neu }}</td>
+                                                <td>{{ rep.ct.neg|add:rep.ow.neg }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
                                         {% if not logout %}
                                             {#                                            <form class="form-login" method="post" action="/addComment">#}
                                             {#                                                {% csrf_token %}#}
