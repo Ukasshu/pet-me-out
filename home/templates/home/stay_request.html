@@ -23,7 +23,7 @@
                                      src={{ st_rq.petId.photo.url }} style="width:110px;height:110px;display:inline-block"/>
                             </div>
                             <div style="font-size: large">My name is {{ st_rq.petId.name }} and I am
-                                {% if st_rq.petId.petType == "Other" %}{{ st_rq.petId.other }}{% else %}
+                                {% if st_rq.petId.type == "Other" %}{{ st_rq.petId.other }}{% else %}
                                 {{ st_rq.petId.type }}{% endif %}
                             </div>
                         </li>
