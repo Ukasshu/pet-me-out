@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% static 'static_jquery/js/jquery.js' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+
+{% block content %}
+    <div class="col-md-9 admin-content" id="myadverts">
+        {% csrf_token %}
+        <div class="panel panel-default" style="margin: 1em;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Suitable host's adverts</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    {% if not hosts %}
+                        <p>We're sorry, but we can't find any suitable advert for You 😩 </p>
+                    {% else %}
+                        {% for host in hosts %}
+                            <div class="col-xs-12 col-sm-5">
+                                <ul class="list-group">
+                                    <li class="list-group-item"><i
+                                            class="glyphicon glyphicon-user"></i>
+                                        First name: {{ host.userId.first_name }}
+                                    </li>
+                                    <li class="list-group-item"><i
+                                            class="glyphicon glyphicon-user"></i>
+                                        Last name: {{ host.userId.last_name }}
+                                    </li>
+                                    <li class="list-group-item"><i
+                                            class="glyphicon glyphicon-home"></i>
+                                        City: {{ host.city }}
+                                    </li>
+                                    <li class="list-group-item"><i
+                                            class="glyphicon glyphicon-calendar"></i>
+                                        Available hosting periods:
+                                        <ul class="fa-ul">
+                                            {% for p in possibilities %}
+                                                {% if p.userId == host.userId %}
+                                                    <li><i class="fa-li fa fa-square"></i>{{ p.startDate }} <i
+                                                            class="glyphicon glyphicon-arrow-right"></i> {{ p.endDate }}
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="profile-header-container">
+                                <div class="profile-header-img" style="position: relative">
+                                    <div class="row">
+                                        <img class="img-circle"
+                                             id="userAvatar"
+                                             src={{ host.photo.url }} style="width:200px;height:200px;display:block"/>
+                                    </div>
+                                    <div class="rank-label-container">
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

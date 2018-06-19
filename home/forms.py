@@ -87,3 +87,10 @@ class AddHostAdvertForm(forms.Form):
     dateTo = forms.DateField(label="To:", widget=MyDateInput(attrs={'class': 'form-control'}))
     type = forms.ChoiceField(label="Pet type:", choices=TYPE_CHOICES,
                              widget=forms.Select(attrs={'class': 'form-control'}))
+
+
+class PetsTypes(forms.Form):
+    pets = forms.ChoiceField(label="", widget=forms.Select(attrs={'class': 'form-control'}),
+                             choices=TYPE_CHOICES)
+    dateFrom = forms.DateField(label="From:", widget=MyDateInput(attrs={'class': 'form-control'}), required=True)
+    dateTo = forms.DateField(label="To:", widget=MyDateInput(attrs={'class': 'form-control'}), required=True)

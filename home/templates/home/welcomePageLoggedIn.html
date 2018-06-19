@@ -20,33 +20,36 @@
             </div>
             <div id="bck-img-content">
                 <script src="static/js/img_slide.js"></script>
-                <h1 class="bck-img-h1" style="font-family: Lobster;font-size:40px;margin-top: -100px">Explore our community</h1>
+                <h1 class="bck-img-h1" style="font-family: Lobster;font-size:40px;margin-top: -100px">Explore our
+                    community</h1>
 
                 <h2 class="bck-img-h2" style="font-family: Lato;margin-top: 5%">
                     <div class="frontpage-wrapper">
-                    <div>Find users</div>
+                        <div>Search for pets to host</div>
 
-                    <div>
-                        <form class="navbar-form navbar-center" id="nav-elem-to-center">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="What's ya'll lookin for???">
+                        <div>
+                            {#                            <form class="navbar-form navbar-center" id="nav-elem-to-center" method="get"#}
+                            {#                                  action="/pets">#}
+                            {#                                <div class="form-group">#}
+                            {#                                    {{ form }}#}
+                            {#                                </div>#}
+                            {#                                <button type="submit" class="btn btn-default">Search</button>#}
+                            {#                            </form>#}
                         </div>
-                        <button type="submit" class="btn btn-default">Search</button>
-                    </form>
-                    </div>
                     </div>
 
                     <div class="frontpage-wrapper">
-                    <div>Search for pet to host</div>
+                        <div>Search for hosts</div>
 
-                    <div>
-                        <form class="navbar-form navbar-center" id="nav-elem-to-center">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="What's ya'll lookin for???">
+                        <div>
+                            <form class="navbar-form navbar-center" id="nav-elem-to-center" method="get"
+                                  action="/hosts">
+                                <div class="form-group">
+                                    {{ form }}
+                                </div>
+                                <button type="submit" class="btn btn-default">Search</button>
+                            </form>
                         </div>
-                        <button type="submit" class="btn btn-default">Search</button>
-                    </form>
-                    </div>
                     </div>
 
 

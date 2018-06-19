@@ -6,6 +6,9 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
+import operator
+from django.db.models import Q
+from functools import reduce
 
 import datetime
 
@@ -38,9 +41,11 @@ def home(request):
                     user = request.user
                     user_data = UserData.objects.filter(userId=user).first()
                     pets = Pet.objects.filter(ownerId=user)
+                    form = PetsTypes()
                     if user is not None and user_data is not None:
                         return render(request, 'home/welcomePageLoggedIn.html',
-                                      {'user': user, 'user_data': user_data, 'pets': pets, 'logout': True})
+                                      {'user': user, 'user_data': user_data, 'pets': pets, 'logout': True,
+                                       'form': form})
                     else:
                         return redirect("/")
                 else:
@@ -187,7 +192,6 @@ def upload_photo(request):
             user_data.photo = form.cleaned_data.get('image')
             user_data.save()
 
-
             return redirect('/profile')
         else:
             return redirect("/addPhoto", {'form': form})
@@ -280,7 +284,7 @@ def create_guest_advert(request):
             if dateFrom > dateTo:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
-            elif dateFrom < datetime.datetime.today().date() :
+            elif dateFrom < datetime.datetime.today().date():
                 messages.warning(request, "🚀 Time travels unavailable yet 🚀")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
             else:
@@ -310,7 +314,7 @@ def create_host_advert(request):
             if date_from > date_to:
                 messages.warning(request, "Wrong time period ('from' after 'to')")
                 return render(request, 'home/add_host_advert.html', {'form': form})
-            elif date_from < datetime.datetime.today().date() :
+            elif date_from < datetime.datetime.today().date():
                 messages.warning(request, "🚀 Time travels unavailable yet 🚀")
                 return render(request, 'home/add_guest_advert.html', {'form': form})
             else:
@@ -342,7 +346,7 @@ def remove_pet(request):
 
 
 def delete_pet(request):
-    if request.user.is_authenticated and request.method=="POST" and request.POST.get('id') is not None:
+    if request.user.is_authenticated and request.method == "POST" and request.POST.get('id') is not None:
         Pet.objects.filter(id=request.POST.get('id')).delete()
         messages.info(request, "Your pet has been deleted")
         return redirect("/profile")
@@ -352,3 +356,28 @@ def delete_pet(request):
 
 def test(request):
     return render(request, 'home/test.html')
+
+
+def hosts(request):
+    if request.user.is_authenticated and request.method == 'GET':
+        dateFrom = request.GET.get('dateFrom')
+        dateTo = request.GET.get('dateTo')
+        petsType = request.GET.get('pets')
+        user_id = request.user
+        user_data = UserData.objects.filter(userId=user_id).first()
+        home_city = user_data.city
+        allPossibilities = StayPossibility.objects.filter(startDate__lte=dateFrom, endDate__gte=dateTo,
+                                                          petType=petsType)
+        hostsPossibilities = allPossibilities.filter(~Q(userId=user_id))
+        if not hostsPossibilities:
+            hosts_data = None
+            possibilities = None
+        else:
+            ids = tuple(map(lambda h: h.userId, hostsPossibilities))
+            query = reduce(operator.or_, (Q(userId=x) for x in ids))
+            hosts_data = UserData.objects.filter(query, city=home_city)
+            possibilities = StayPossibility.objects.filter(query)
+        return render(request, 'home/hosts.html',
+                      {'hosts': hosts_data, 'possibilities': possibilities, 'from': dateFrom, 'to': dateTo})
+    else:
+        return render(request, 'home/not_found.html')
