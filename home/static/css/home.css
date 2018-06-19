@@ -148,6 +148,10 @@ body {
     display: inline-block;
 }
 
+.form-group>div{
+    font-family: Lato;
+}
+
 #panel-search, #panel-profile {
     height: auto;
     display: inline-block;
@@ -196,6 +200,10 @@ body {
 .profile-header{
     display: inline-block;
 
+}
+
+.ce{
+    display: inline-block;
 }
 
 .profile-header {
