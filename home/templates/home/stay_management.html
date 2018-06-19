@@ -42,7 +42,7 @@
                         {% endif %}
                         <li class="list-group-item"><i>Possibilities</i></li>
                         {% if pending.pos|length == 0 %}
-                            <li class="list-group-item">Nothing to show</li>
+                            <li class="list-group-item" style="color: #555555">Nothing to show</li>
                         {% else %}
                             {% for p in pending.pos %}
                                 <li class="list-group-item">
@@ -71,7 +71,7 @@
                         <li class="list-group-item"><b>Stay offers</b></li>
                         <li class="list-group-item"><i>Requests</i></li>
                         {% if offers.req|length == 0 %}
-                            <li class="list-group-item">Nothing to show</li>
+                            <li class="list-group-item" style="color: #555555">Nothing to show</li>
                         {% else %}
                             {% for r in offers.req %}
                                 <li class="list-group-item">
