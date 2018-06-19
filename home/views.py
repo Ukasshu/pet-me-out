@@ -667,11 +667,9 @@ def guests(request):
             owners_data = None
             requests = None
         else:
-            ids = tuple(map(lambda h: h.userId, filteredRequests))
-            query = reduce(operator.or_, (Q(userId=x) for x in ids))
-            owners_data = UserData.objects.filter(query, city=home_city)
+            pets_data = list(map(lambda r: r.petId, filteredRequests))
             requests = filteredRequests
         return render(request, 'home/guests.html',
-                      {'owners': owners_data, 'requests': requests, 'from': dateFrom, 'to': dateTo})
+                      {'pets': pets_data, 'requests': requests, 'from': dateFrom, 'to': dateTo})
     else:
-        return render(request, 'home/not_found.html')
+        return render(request, '/')
