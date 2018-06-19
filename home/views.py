@@ -52,7 +52,8 @@ def home(request):
         return render(request, 'home/welcomePage.html')
     else:
         user_photo = UserData.objects.filter(userId=request.user).first().photo
-        return render(request, 'home/welcomePageLoggedIn.html', {'user_photo': user_photo})
+        form = PetsTypes()
+        return render(request, 'home/welcomePageLoggedIn.html', {'user_photo': user_photo, 'form': form})
 
 
 def register(request):
